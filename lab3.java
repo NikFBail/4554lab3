@@ -4,7 +4,8 @@ import java.lang.Math;
 class lab3 {
 
     public static void main(String args[]) {
-        String block = "a5Z#\t";
+        String block = "Hello";
+        String key = "a5Z#\t";
 
         System.out.println(Arrays.toString(convertToASCII(block)));
         int[] ascii = convertToASCII(block);
@@ -15,6 +16,8 @@ class lab3 {
         System.out.println(Arrays.toString(padding(binary)));
         String[] padded = padding(binary);
 
+        System.out.println(Arrays.toString(rightShift(padded)));
+        String[] shifted = rightShift(padded);
     }
 
     /* Method for converting a string
@@ -62,6 +65,32 @@ class lab3 {
             }
             input[i] = curr;
         }
+
+        return input;
+    }
+
+    /* Method for shifting
+     * right 3 bits
+     * Moves the last three bits of
+     * a 7-length binary string to
+     * the beginning of the next
+     * binary string
+     * The last three of the last
+     * binary string will go to the
+     * beginning of the first binary
+     * string
+     */
+    public static String[] rightShift(String[] input) {
+        // Gets the last three digits of the first binary string
+        String lastThree = input[0].substring(input[0].length() - 3);
+        for(int i = 1; i < input.length; i++) {
+            
+            // Gets the last three digits of the current binary string
+            lastThree = input[i].substring(input[i].length() - 3);
+            // Adds three digits to the current binary string and cuts off the last three
+            input[i] = lastThree + input[i].substring(0, input[i].length() - 3);
+        }
+        input[0] = lastThree + input[0].substring(0, input[0].length() - 3);
 
         return input;
     }
