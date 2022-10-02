@@ -7,31 +7,21 @@ class lab3 {
         String block = "Hello";
         String key = "a5Z#\t";
 
-        // Convert plaintext to ASCII values
-        int[] ascii = convertToASCII(block);
-
-        // Convert plaintext from ASCII to binary
-        String[] binary = convertToBinary(ascii);
-
         // Add padding 0s to the binary plaintext
-        String[] padded = padding(binary);
+        String[] padded = padding(block);
 
         // Right shift the padded binary plaintext
         String[] shifted = rightShift(padded);
-        System.out.println(Arrays.toString(shifted));
+        System.out.println("Plaintext: " + Arrays.toString(shifted));
 
-        // Convert key to ASCII values
-        int[] keyAscii = convertToASCII(key);
 
-        // Convert key from ASCII to binary
-        String[] keyBinary = convertToBinary(keyAscii);
 
         // Add padding 0s to the binary key
-        String[] keyPadded = padding(keyBinary);
-        System.out.println(Arrays.toString(keyPadded));
+        String[] keyPadded = padding(key);
+        System.out.println("Key: " + Arrays.toString(keyPadded));
 
         String[] encrypt = encrypted(shifted, keyPadded);
-        System.out.println(Arrays.toString(encrypt));
+        System.out.println("Encryption: " + Arrays.toString(encrypt));
 
     }
 
@@ -56,10 +46,11 @@ class lab3 {
      * Stores the binary values in
      * a string array
      */
-    public static String[] convertToBinary(int[] arr) {
-        String[] result = new String[arr.length];
-        for(int i = 0; i < arr.length; i++) {
-            result[i] = Integer.toBinaryString(arr[i]);
+    public static String[] convertToBinary(String input) {
+        int[] ascii = convertToASCII(input);
+        String[] result = new String[ascii.length];
+        for(int i = 0; i < ascii.length; i++) {
+            result[i] = Integer.toBinaryString(ascii[i]);
         }
 
         return result;
@@ -70,18 +61,19 @@ class lab3 {
      * of the binary if it is less than
      * 7 digits long
      */
-    public static String[] padding(String[] input) {
+    public static String[] padding(String input) {
+        String[] binary = convertToBinary(input);
         String curr;
-        for(int i = 0; i < input.length; i++) {
-            curr = input[i];
+        for(int i = 0; i < binary.length; i++) {
+            curr = binary[i];
             // As long as the length of curr is less than 7
             while(curr.length() < 7) {
                 curr = 0 + curr;
             }
-            input[i] = curr;
+            binary[i] = curr;
         }
 
-        return input;
+        return binary;
     }
 
     /* Method for shifting
