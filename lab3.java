@@ -7,17 +7,29 @@ class lab3 {
         String block = "Hello";
         String key = "a5Z#\t";
 
-        System.out.println(Arrays.toString(convertToASCII(block)));
+        // Convert plaintext to ASCII values
         int[] ascii = convertToASCII(block);
 
-        System.out.println(Arrays.toString(convertToBinary(ascii)));
+        // Convert plaintext from ASCII to binary
         String[] binary = convertToBinary(ascii);
 
-        System.out.println(Arrays.toString(padding(binary)));
+        // Add padding 0s to the binary plaintext
         String[] padded = padding(binary);
 
-        System.out.println(Arrays.toString(rightShift(padded)));
+        // Right shift the padded binary plaintext
         String[] shifted = rightShift(padded);
+        System.out.println(Arrays.toString(shifted));
+
+        // Convert key to ASCII values
+        int[] keyAscii = convertToASCII(key);
+
+        // Convert key from ASCII to binary
+        String[] keyBinary = convertToBinary(keyAscii);
+
+        // Add padding 0s to the binary key
+        String[] keyPadded = padding(keyBinary);
+        System.out.println(Arrays.toString(keyPadded));
+
     }
 
     /* Method for converting a string
@@ -83,16 +95,34 @@ class lab3 {
     public static String[] rightShift(String[] input) {
         // Gets the last three digits of the first binary string
         String lastThree = input[0].substring(input[0].length() - 3);
+        String temp = "";
         for(int i = 1; i < input.length; i++) {
-            
             // Gets the last three digits of the current binary string
-            lastThree = input[i].substring(input[i].length() - 3);
+            temp = input[i].substring(input[i].length() - 3);
             // Adds three digits to the current binary string and cuts off the last three
             input[i] = lastThree + input[i].substring(0, input[i].length() - 3);
+            
+            // Sets lastThree to temp
+            lastThree = temp;
         }
         input[0] = lastThree + input[0].substring(0, input[0].length() - 3);
 
         return input;
+    }
+
+    /* Method for adding the
+     * key and plaintext together
+     * to encrypt the plaintext
+     * Takes two binary string arrays
+     * and adds them together
+     */
+    public static void encrypted(String[] plaintext, String[] key) {
+        String[] encrypted = new String[key.length];
+        for(int i = 0; i < plaintext.length; i++) {
+            for(int j = 0; j < plaintext[i].length(); j++) {
+                
+            }
+        }
     }
 
 }
