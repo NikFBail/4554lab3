@@ -7,16 +7,11 @@ class lab3 {
         String block = "Hello";
         String key = "a5Z#\t";
 
-        // Add padding 0s to the binary plaintext
-        String[] padded = padding(block);
-
-        // Right shift the padded binary plaintext
-        String[] shifted = rightShift(padded);
+        // Creating the plaintext
+        String[] shifted = rightShift(block);
         System.out.println("Plaintext: " + Arrays.toString(shifted));
 
-
-
-        // Add padding 0s to the binary key
+        // Creating the key
         String[] keyPadded = padding(key);
         System.out.println("Key: " + Arrays.toString(keyPadded));
 
@@ -87,22 +82,23 @@ class lab3 {
      * beginning of the first binary
      * string
      */
-    public static String[] rightShift(String[] input) {
+    public static String[] rightShift(String input) {
+        String[] padded = padding(input);
         // Gets the last three digits of the first binary string
-        String lastThree = input[0].substring(input[0].length() - 3);
+        String lastThree = padded[0].substring(padded[0].length() - 3);
         String temp = "";
-        for(int i = 1; i < input.length; i++) {
+        for(int i = 1; i < padded.length; i++) {
             // Gets the last three digits of the current binary string
-            temp = input[i].substring(input[i].length() - 3);
+            temp = padded[i].substring(padded[i].length() - 3);
             // Adds three digits to the current binary string and cuts off the last three
-            input[i] = lastThree + input[i].substring(0, input[i].length() - 3);
+            padded[i] = lastThree + padded[i].substring(0, padded[i].length() - 3);
             
             // Sets lastThree to temp
             lastThree = temp;
         }
-        input[0] = lastThree + input[0].substring(0, input[0].length() - 3);
+        padded[0] = lastThree + padded[0].substring(0, padded[0].length() - 3);
 
-        return input;
+        return padded;
     }
 
     /* Method for adding the
