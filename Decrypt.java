@@ -5,27 +5,26 @@ public class Decrypt {
     public static String decrypt(String[] encryption, String[] key) {
         String[] decrypted = decrypted(encryption, key);
         String[] removeShift = removeShift(decrypted);
-        int[] word = binaryToASCII(removeShift);
-        System.out.println(Arrays.toString(word));
+        int[] ascii = binaryToASCII(removeShift);
+        String word = asciiToChar(ascii);
 
-        return "";
+        return word;
     }
     
-    public static int[] convertToASCII(String input) {
-        int[] result = new int[input.length()];
-        int num = 0;
-        for(int i = 0; i < input.length(); i++) {
-            num = (int) (input.charAt(i));
-            result[i] = num;
+    public static String asciiToChar(int[] input) {
+        String result = "";
+        for(int i = 0; i < input.length; i++) {
+            result += (char) input[i];
         }
-        
         return result;
+
     }
 
     /* Converts from binary to a decimal value */
     public static int[] binaryToASCII(String[] input) {
         int[] result = new int[input.length];
         for(int i = 0; i < input.length; i++) {
+            // Converts to decimal, which is what ASCII is
             result[i] = Integer.parseInt(input[i], 2);
         }
 
