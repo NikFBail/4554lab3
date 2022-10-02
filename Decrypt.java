@@ -2,6 +2,15 @@ import java.util.Arrays;
 
 public class Decrypt {
 
+    public static String decrypt(String[] encryption, String[] key) {
+        String[] decrypted = decrypted(encryption, key);
+        String[] removeShift = removeShift(decrypted);
+        int[] word = binaryToASCII(removeShift);
+        System.out.println(Arrays.toString(word));
+
+        return "";
+    }
+    
     public static int[] convertToASCII(String input) {
         int[] result = new int[input.length()];
         int num = 0;
@@ -13,33 +22,31 @@ public class Decrypt {
         return result;
     }
 
-    public static String[] convertToBinary(String input) {
-        int[] ascii = convertToASCII(input);
-        String[] result = new String[ascii.length];
-        for(int i = 0; i < ascii.length; i++) {
-            result[i] = Integer.toBinaryString(ascii[i]);
+    /* Converts from binary to a decimal value */
+    public static int[] binaryToASCII(String[] input) {
+        int[] result = new int[input.length];
+        for(int i = 0; i < input.length; i++) {
+            result[i] = Integer.parseInt(input[i], 2);
         }
 
         return result;
     }
 
-    public static String[] rightShift(String input) {
-        String[] padded = padding(input);
-        // Gets the last three digits of the first binary string
-        String lastThree = padded[0].substring(padded[0].length() - 3);
+    public static String[] removeShift(String[] input) {
+        // Gets the first three digits of the first binary string
+        String firstThree = input[0].substring(0, 3);
         String temp = "";
-        for(int i = 1; i < padded.length; i++) {
-            // Gets the last three digits of the current binary string
-            temp = padded[i].substring(padded[i].length() - 3);
-            // Adds three digits to the current binary string and cuts off the last three
-            padded[i] = lastThree + padded[i].substring(0, padded[i].length() - 3);
+        for(int i = input.length - 1; i >= 0; i--) {
+            // Gets the first three digits of the current binary string
+            temp = input[i].substring(0, 3);
+            // Adds three digits to the current binary string and cuts off the first three
+            input[i] = input[i].substring(3) + firstThree;
             
-            // Sets lastThree to temp
-            lastThree = temp;
+            // Sets firstThree to temp
+            firstThree = temp;
         }
-        padded[0] = lastThree + padded[0].substring(0, padded[0].length() - 3);
 
-        return padded;
+        return input;
     }
 
     /* Method that XORs the key from
@@ -64,6 +71,7 @@ public class Decrypt {
                 decrypted[i] += Integer.toString(sum);
             }
         }
+
         return decrypted;
     }
 }

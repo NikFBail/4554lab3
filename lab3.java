@@ -18,8 +18,8 @@ class lab3 {
         String[] encrypt = encrypted(shifted, keyPadded);
         System.out.println("Encryption: " + Arrays.toString(encrypt));
 
-        
-
+        String decrypted = Decrypt.decrypt(encrypt, keyPadded);
+        System.out.println(decrypted);
     }
 
     /* Method for converting a string
