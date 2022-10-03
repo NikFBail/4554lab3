@@ -4,6 +4,7 @@ import java.lang.Math;
 class lab3 {
 
     public static void main(String args[]) {
+        // Block and key can only be 5 chars long
         String block = "Hello";
         String key = "a5Z#\t";
 
@@ -15,9 +16,11 @@ class lab3 {
         String[] keyPadded = padding(key);
         System.out.println("Key: " + Arrays.toString(keyPadded));
 
+        // Creating the encryption
         String[] encrypt = encrypted(shifted, keyPadded);
         System.out.println("Encryption: " + Arrays.toString(encrypt));
 
+        // Calling the decryption class to decrypt
         String decrypted = Decrypt.decrypt(encrypt, keyPadded);
         System.out.println(decrypted);
     }
@@ -44,9 +47,11 @@ class lab3 {
      * a string array
      */
     public static String[] convertToBinary(String input) {
+        // Calls the method to convert the input into an ASCII value
         int[] ascii = convertToASCII(input);
         String[] result = new String[ascii.length];
         for(int i = 0; i < ascii.length; i++) {
+            // Converts value of ascii[i] into a binary string
             result[i] = Integer.toBinaryString(ascii[i]);
         }
 
@@ -59,10 +64,12 @@ class lab3 {
      * 7 digits long
      */
     public static String[] padding(String input) {
+        // Calls the method to convert the input into a binary string
         String[] binary = convertToBinary(input);
         String curr;
         for(int i = 0; i < binary.length; i++) {
             curr = binary[i];
+
             // As long as the length of curr is less than 7
             while(curr.length() < 7) {
                 curr = 0 + curr;
@@ -85,13 +92,16 @@ class lab3 {
      * string
      */
     public static String[] rightShift(String input) {
+        // Calls the method to convert the input into a padded binary string
         String[] padded = padding(input);
+
         // Gets the last three digits of the first binary string
         String lastThree = padded[0].substring(padded[0].length() - 3);
         String temp = "";
         for(int i = 1; i < padded.length; i++) {
             // Gets the last three digits of the current binary string
             temp = padded[i].substring(padded[i].length() - 3);
+
             // Adds three digits to the current binary string and cuts off the last three
             padded[i] = lastThree + padded[i].substring(0, padded[i].length() - 3);
             
@@ -114,14 +124,18 @@ class lab3 {
         int p = 0; // Holder for one digit in the binary string of plaintext
         int sum = 0;
         String[] encrypted = new String[key.length];
-        // Filling the array with empty strings to it isn't filled with null values
+
+        // Filling the array with empty strings so it isn't filled with null values
         Arrays.fill(encrypted, "");
         for(int i = 0; i < plaintext.length; i++) {
             for(int j = 0; j < plaintext[i].length(); j++) {
+
                 // Gets the integer value of one digit in the binary of plaintext[i]
                 p = Integer.valueOf(plaintext[i].substring(j, j + 1));
+
                 // Gets the integer value of one digit in the binary of key[i]
                 k = Integer.valueOf(key[i].substring(j, j + 1));
+
                 sum = (p + k) % 2; // XOR two binary digits
 
                 // Converts sum to a string and adds it to encrypted[i]
