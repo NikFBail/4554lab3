@@ -15,9 +15,17 @@ class lab3 {
         String[] keyPadded = Conversions.padding(key);
         System.out.println("Key: " + Arrays.toString(keyPadded));
 
-        // Creating the encryption
+        // Creating the encryption in binary form
         String[] encrypt = encrypted(shifted, keyPadded);
         System.out.println("Encryption: " + Arrays.toString(encrypt));
+
+        // Converting the encryption from binary to ASCII
+        int[] encryptASCII = Conversions.binaryToASCII(encrypt);
+        System.out.println("Encryption: " + Arrays.toString(encryptASCII));
+        
+        // Converting encryption from ASCII to char
+        String encryption = Conversions.asciiToChar(encryptASCII);
+        System.out.println("Encryption: " + encryption);
 
         // Calling the decryption class to decrypt
         String decrypted = Decrypt.decrypt(encrypt, keyPadded);
