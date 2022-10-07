@@ -6,6 +6,7 @@ class lab3 {
         // Block and key can only be 5 chars long
         String block = "Hello";
         String key = "a5Z#\t";
+        int[] iv = {0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1};
 
         // Creating the plaintext
         String[] shifted = Conversions.rightShift(block);
@@ -30,6 +31,9 @@ class lab3 {
         // Calling the decryption class to decrypt
         String decrypted = Decrypt.decrypt(encrypt, keyPadded);
         System.out.println(decrypted);
+
+        System.out.println(Arrays.toString(Conversions.binaryToString(iv)));
+
     }
 
     /* Method for adding the

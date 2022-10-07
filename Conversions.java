@@ -134,5 +134,20 @@ public class Conversions {
 
         return input;
     }
+
+    public static String[] binaryToString(int[] arr) {
+        String[] result = new String[arr.length / 7];
+        for(int i = 0; i < arr.length; i++) {
+            while(i % 7 != 0) {
+                result[i/7] += Integer.toString(arr[i]);
+                i++;
+            }
+        }
+
+        for (int j = 0; j<arr.length; j+=7) {
+            if ()
+        }
+        return result;
+    }
     
 }
