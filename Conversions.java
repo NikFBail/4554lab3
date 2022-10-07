@@ -135,8 +135,17 @@ public class Conversions {
         return input;
     }
 
+    /* Converts 35 binary digits to a String array 
+     * holding 5, 7 character strings for each
+     * 7 bit binary value
+     */
     public static String[] binaryToString(int[] arr) {
         String[] result = new String[arr.length / 7];
+
+        for(int n = 0; n < result.length; n++) {
+            result[n] = "";
+        }
+
         for(int i = 0; i < arr.length; i++) {
             while(i % 7 != 0) {
                 result[i/7] += Integer.toString(arr[i]);
@@ -145,8 +154,9 @@ public class Conversions {
         }
 
         for (int j = 0; j<arr.length; j+=7) {
-            if ()
+            result[j/7] = Integer.toString(arr[j]) + result[j/7];
         }
+
         return result;
     }
     

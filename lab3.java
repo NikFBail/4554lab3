@@ -32,7 +32,13 @@ class lab3 {
         String decrypted = Decrypt.decrypt(encrypt, keyPadded);
         System.out.println(decrypted);
 
+        String[] IV = Conversions.binaryToString(iv);
         System.out.println(Arrays.toString(Conversions.binaryToString(iv)));
+
+        String[] CBCwithIV = encrypted(shifted, IV);
+        System.out.println(Arrays.toString(CBCwithIV));
+
+
 
     }
 
