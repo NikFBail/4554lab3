@@ -36,9 +36,7 @@ class lab3 {
          * with the key
          */
         System.out.println(block); // Original message
-        String[] CBCiv = Conversions.binaryToString(cbcIV); // Converting the CBC iv to a string array
-        String[] CBCwithIV = CBC.xorIV(plaintext, CBCiv); // Encrypting using the CBC method, the plaintext and the CBC iv
-        String[] encryptedCBC = ECB.encrypted(CBCwithIV, formalKey); // Encrypting CBCwithIV with the key
+        String[] encryptedCBC = CBC.encryptCBC(plaintext, formalKey); // Encrypting CBCwithIV with the key
         String decryptedCBC = ECB.decrypt(encryptedCBC, formalKey);
         System.out.println(decryptedCBC);
 

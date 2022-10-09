@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Conversions {
 
     /* Converts an ASCII value to
@@ -142,9 +144,7 @@ public class Conversions {
     public static String[] binaryToString(int[] arr) {
         String[] result = new String[arr.length / 7];
 
-        for(int n = 0; n < result.length; n++) {
-            result[n] = "";
-        }
+        Arrays.fill(result, "");
 
         for(int i = 0; i < arr.length; i++) {
             while(i % 7 != 0) {
