@@ -12,7 +12,7 @@ public class ECB {
         int k =0; // Holder for one digit in the binary string of key
         int p = 0; // Holder for one digit in the binary string of plaintext
         int sum = 0;
-        String[] encrypted = new String[key.length];
+        String[] encrypted = new String[plaintext.length];
 
         // Filling the array with empty strings so it isn't filled with null values
         Arrays.fill(encrypted, "");
@@ -23,7 +23,7 @@ public class ECB {
                 p = Integer.valueOf(plaintext[i].substring(j, j + 1));
 
                 // Gets the integer value of one digit in the binary of key[i]
-                k = Integer.valueOf(key[i].substring(j, j + 1));
+                k = Integer.valueOf(key[i % key.length].substring(j, j + 1));
 
                 sum = (p + k) % 2; // XOR two binary digits
 
@@ -54,7 +54,7 @@ public class ECB {
         int k =0; // Holder for one digit in the binary string of key
         int e = 0; // Holder for one digit in the binary string of encryption
         int sum = 0;
-        String[] decrypted = new String[key.length];
+        String[] decrypted = new String[encryption.length];
 
         // Filling the array with empty strings to it isn't filled with null values
         Arrays.fill(decrypted, "");
@@ -65,7 +65,7 @@ public class ECB {
                 e = Integer.valueOf(encryption[i].substring(j, j + 1));
 
                 // Gets the integer value of one digit in the binary of key[i]
-                k = Integer.valueOf(key[i].substring(j, j + 1));
+                k = Integer.valueOf(key[i % key.length].substring(j, j + 1));
 
                 sum = (e + k) % 2; // XOR two binary digits
 

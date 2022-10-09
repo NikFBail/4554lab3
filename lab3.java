@@ -4,7 +4,7 @@ class lab3 {
 
     public static void main(String args[]) {
         // Block and key can only be 5 chars long
-        String block = "Hello";
+        String block = "Hellojhdfhsdf";
         String key = "a5Z#\t";
         
         // Random iv generator
