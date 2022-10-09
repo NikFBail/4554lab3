@@ -159,5 +159,16 @@ public class Conversions {
 
         return result;
     }
+
+    // Initialization Vector generator
+    // Creates an IV of length 35
+    public static int[] ivGenerator() {
+        int[] iv = new int[35];
+        for(int i = 0; i < iv.length; i++) {
+            iv[i] = (int) Math.round(Math.random());
+        }
+
+        return iv;
+    }
     
 }
