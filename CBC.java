@@ -3,7 +3,7 @@ import java.util.Arrays;
 public class CBC {
     
     private static int[] cbcIV = {0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1};
-    private static String[] iv = Conversions.binaryToString(cbcIV);
+    public static String[] iv = Conversions.binaryToString(cbcIV);
 
     /* Method for
      * xor-ing the plaintext and the iv
