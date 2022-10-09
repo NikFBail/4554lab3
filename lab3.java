@@ -41,7 +41,7 @@ class lab3 {
         System.out.println("Key: " + Arrays.toString(formalKey));
         String[] encryptedCBC = CBC.encryptCBC(plaintext, formalKey); // Encrypting CBCwithIV with the key
         System.out.println(Arrays.toString(encryptedCBC));
-        String decryptedCBC = ECB.decrypt(encryptedCBC, formalKey);
+        String decryptedCBC = CBC.decrypt(encryptedCBC, formalKey);
         System.out.println(decryptedCBC);
 
     }
