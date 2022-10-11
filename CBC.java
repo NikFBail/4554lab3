@@ -81,23 +81,20 @@ public class CBC {
 
                 // Gets the integer value of one digit in the binary of key[i]
                 k = Integer.valueOf(key[i % key.length].substring(j, j + 1));
-
-                // If xor-ing with the iv, don't care about previous output
+                
+                sum = XOR(e, k);
+                // If we should XOR sum with the initialization vector
                 if(i < iv.length) {
-                    // Gets integer value of one digit in the binary of initialVect[i]
-                    initVect = Integer.valueOf(CBC.iv[i % CBC.iv.length].substring(j, j + 1));
+                    initVect = Integer.valueOf(iv[i].substring(j, j + 1));
+                    decrypt = XOR(sum, initVect);
                 }
-                // If XOR-ing with the output of the previous encryption
+                // Otherwise XOR sum with the previous output, ie XOR y3 with x2
                 else {
-                    // Gets integer value of one digit in the binary of encrypted[i - 1]
-                    initVect = Integer.valueOf(decrypted[i - 1].substring(j, j + 1));
+                    initVect = Integer.valueOf(encryption[i - 1].substring(j, j + 1));
+                    decrypt = XOR(sum, initVect);
                 }
 
-                sum = XOR(e, k); // XOR two binary digits
-
-                decrypt = XOR(sum, initVect);
-                // Converts sum to a string and adds it to decrypted[i]
-                decrypted[i] += Integer.toString(decrypt);
+                decrypted [i] += Integer.toString(decrypt);
             }
         }
 
