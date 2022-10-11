@@ -17,7 +17,7 @@ public class CBC {
      */
     public static String[] encryptCBC(String[] plaintext, String[] key) {
         int initVect =0; // Holder for one digit in the binary string of iv
-        int k = 0;
+        int k = 0; // Holder for one digit in the binary string of the key
         int p = 0; // Holder for one digit in the binary string of plaintext
         int encrypt = 0;
         int sum = 0;
@@ -25,32 +25,34 @@ public class CBC {
 
         // Filling the array with empty strings so it isn't filled with null values
         Arrays.fill(encrypted, "");
+        // Goes through the array
         for(int i = 0; i < plaintext.length; i++) {
+            // Goes through plaintext[i]
             for(int j = 0; j < plaintext[i].length(); j++) {
-
-                // Gets the integer value of one digit in the binary of plaintext[i]
+                // Gets one digit of the binary string key
+                // Use i % key.length so the key will loop around
+                k = Integer.valueOf(key[i % key.length].substring(j, j + 1));
+                // Gets one digit of the binary string plaintext
                 p = Integer.valueOf(plaintext[i].substring(j, j + 1));
 
-                // Gets the integer value of one digit in the binary of key[i]
-                k = Integer.valueOf(key[i % key.length].substring(j, j + 1));
-
-                // If xor-ing with the iv, don't care about previous output
+                // If we should XOR the plaintext and the initial vector
                 if(i < iv.length) {
-                    // Gets integer value of one digit in the binary of initialVect[i]
-                    initVect = Integer.valueOf(CBC.iv[i % CBC.iv.length].substring(j, j + 1));
+                    initVect = Integer.valueOf(iv[i].substring(j, j + 1));
+                    sum = XOR(p, initVect);
                 }
-                // If XOR-ing with the output of the previous encryption
+                // Otherwise XOR the plaintext with the last output, ie XOR x3 with y2
                 else {
-                    // Gets integer value of one digit in the binary of encrypted[i - 1]
+                    // Getting the right digit of the previous output
                     initVect = Integer.valueOf(encrypted[i - 1].substring(j, j + 1));
+                    sum = XOR(p, initVect);
                 }
-                
-                sum = XOR(p, initVect); // XORs two digits
 
-                encrypt = XOR(sum, k); // XORs two digits
+                encrypt = XOR(sum, k);
                 encrypted[i] += Integer.toString(encrypt);
+
             }
         }
+
         return encrypted;
     }
 
