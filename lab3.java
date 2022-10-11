@@ -33,6 +33,17 @@ class lab3 {
         String[] encryptedCBC = CBC.encryptCBC(plaintext, formalKey); // Encrypting CBCwithIV with the key
         String decryptedCBC = CBC.decryptCBC(encryptedCBC, formalKey); // Decrypting the CBC encryption with the key
 
+        /* Cipher Feedback
+         * This block cipher encrypts
+         * the iv with the k, and
+         * then XORs the result with
+         * the plaintext
+         */
+        String[] encryptedCFB = CFB.encryptCFB(plaintext, formalKey);
+        System.out.println(Arrays.toString(encryptedCFB));
+        String  decryptedCFB = CFB.decryptCFB(encryptedCFB, formalKey);
+        System.out.println(decryptedCFB);
+
     }
 
 }

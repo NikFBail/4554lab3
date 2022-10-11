@@ -101,7 +101,7 @@ public class CBC {
         return decrypted;
     }
 
-     /* Main method for decryption
+    /* Main method for decryption
      * Calls upon the other methods
      * in this class to help decrypt
      */
