@@ -3,13 +3,13 @@ import java.util.Arrays;
 public class CBC {
     
     private static int[] cbcIV = {0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1};
-    public static String[] iv = Conversions.binaryToString(cbcIV);
+    private static String[] iv = Conversions.binaryToString(cbcIV);
 
     /* Method for
      * encrypting using cipher block chaining
      * First xor the input with either 
      * the iv (only for the first input)
-     * or the output of the the encryption
+     * or the output of the encryption
      * of the previous input
      * Then encrypt with the key
      * The output is then xor-ed with the
@@ -105,7 +105,7 @@ public class CBC {
      * Calls upon the other methods
      * in this class to help decrypt
      */
-    public static String decrypt(String[] encryption, String[] key) {
+    public static String decryptCBC(String[] encryption, String[] key) {
         String[] decrypted = decrypted(encryption, key);
         String[] removeShift = Conversions.removeShift(decrypted);
         int[] ascii = Conversions.binaryToASCII(removeShift);

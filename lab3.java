@@ -30,15 +30,8 @@ class lab3 {
          * and then encrypts the result
          * with the key
          */
-        System.out.println(block); // Original message
-        System.out.println("Plaintext: " + Arrays.toString(plaintext));
-        System.out.println("iv: " + Arrays.toString(CBC.iv));
-        System.out.println("Key: " + Arrays.toString(formalKey));
         String[] encryptedCBC = CBC.encryptCBC(plaintext, formalKey); // Encrypting CBCwithIV with the key
-        System.out.println(Arrays.toString(encryptedCBC));
-        String decryptedCBC = CBC.decrypt(encryptedCBC, formalKey);
-        System.out.println(Arrays.toString(CBC.decrypted(encryptedCBC, formalKey)));
-        System.out.println(decryptedCBC);
+        String decryptedCBC = CBC.decryptCBC(encryptedCBC, formalKey); // Decrypting the CBC encryption with the key
 
     }
 
