@@ -40,9 +40,7 @@ class lab3 {
          * the plaintext
          */
         String[] encryptedCFB = CFB.encryptCFB(plaintext, formalKey);
-        System.out.println(Arrays.toString(encryptedCFB));
         String  decryptedCFB = CFB.decryptCFB(encryptedCFB, formalKey);
-        System.out.println(decryptedCFB);
 
     }
 
