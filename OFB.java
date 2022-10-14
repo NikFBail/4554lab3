@@ -13,8 +13,12 @@ public class OFB {
      * gets encrypted with the key
      * Then XOR the result with the input
      * Need to store the eBox encryptions
+     * 
+     * The encryption method is the decryption method too
+     * For decryption, input is the encrypted text, and
+     * the key
      */
-    public static String[] encryptOFB(String[] plaintext, String[] key) {
+    public static String[] encryptDecryptOFB(String[] plaintext, String[] key) {
         int initVect = 0;
         int k = 0;
         int p = 0;
@@ -51,18 +55,23 @@ public class OFB {
         return encrypted;
     }
 
+    /* Method for decrypting the
+     * Output Feedback
+     * 
+     */
+
     /* Main method for decryption
      * Calls upon the other methods
      * in this class to help decrypt
      */
-    // public static String decryptCFB(String[] encryption, String[] key) {
-    //     String[] decrypted = decrypted(encryption, key);
-    //     String[] removeShift = Conversions.removeShift(decrypted);
-    //     int[] ascii = Conversions.binaryToASCII(removeShift);
-    //     String word = Conversions.asciiToChar(ascii);
+    public static String decryptOFB(String[] encryption, String[] key) {
+        String[] decrypted = encryptDecryptOFB(encryption, key);
+        String[] removeShift = Conversions.removeShift(decrypted);
+        int[] ascii = Conversions.binaryToASCII(removeShift);
+        String word = Conversions.asciiToChar(ascii);
 
-    //     return word;
-    // }
+        return word;
+    }
 
     // XOR method
     public static int XOR(int x1, int x2) {

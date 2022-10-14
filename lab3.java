@@ -50,9 +50,8 @@ class lab3 {
          * then it XORS the result with
          * the input
          */
-        System.out.println("Plaintext: " + block);
-        String[] encryptedOFB = OFB.encryptOFB(plaintext, formalKey);
-        System.out.println("Encryption: " + Arrays.toString(encryptedOFB));
+        String[] encryptedOFB = OFB.encryptDecryptOFB(plaintext, formalKey);
+        String decryptedOFB = OFB.decryptOFB(encryptedOFB, formalKey);
 
     }
 
