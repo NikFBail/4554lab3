@@ -35,12 +35,24 @@ class lab3 {
 
         /* Cipher Feedback
          * This block cipher encrypts
-         * the iv with the k, and
+         * the iv with the key, and
          * then XORs the result with
          * the plaintext
          */
         String[] encryptedCFB = CFB.encryptCFB(plaintext, formalKey);
         String  decryptedCFB = CFB.decryptCFB(encryptedCFB, formalKey);
+
+        /* Output Feedback
+         * This block cipher encrypts
+         * the iv with the key, once
+         * the iv is done it encrypts
+         * the previous eBox with the key
+         * then it XORS the result with
+         * the input
+         */
+        System.out.println("Plaintext: " + block);
+        String[] encryptedOFB = OFB.encryptOFB(plaintext, formalKey);
+        System.out.println("Encryption: " + Arrays.toString(encryptedOFB));
 
     }
 

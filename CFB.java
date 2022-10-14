@@ -7,7 +7,7 @@ public class CFB {
 
     /* Method for encrypting using
      * Cipher Feedback
-     * First encrypt the either the
+     * First encrypt either the
      * iv (only for the first input)
      * or the output of the encryption
      * of the previous input
