@@ -31,7 +31,7 @@ public class Conversions {
         return result;
     }
 
-    /* Converts from binary to a decimal value */
+    // Converts from binary to a decimal value
     public static int[] binaryToASCII(String[] input) {
         int[] result = new int[input.length];
         for(int i = 0; i < input.length; i++) {
@@ -48,13 +48,11 @@ public class Conversions {
      * Stores the binary values in
      * a string array
      */
-    public static String[] convertToBinary(String input) {
-        // Calls the method to convert the input into an ASCII value
-        int[] ascii = convertToASCII(input);
-        String[] result = new String[ascii.length];
-        for(int i = 0; i < ascii.length; i++) {
+    public static String[] convertToBinary(int[] input) {
+        String[] result = new String[input.length];
+        for(int i = 0; i < input.length; i++) {
             // Converts value of ascii[i] into a binary string
-            result[i] = Integer.toBinaryString(ascii[i]);
+            result[i] = Integer.toBinaryString(input[i]);
         }
 
         return result;
@@ -65,21 +63,20 @@ public class Conversions {
      * of the binary if it is less than
      * 7 digits long
      */
-    public static String[] padding(String input) {
-        // Calls the method to convert the input into a binary string
-        String[] binary = convertToBinary(input);
+    public static String[] padding(String[] input) {
+        String[] result = new String[input.length];
         String curr;
-        for(int i = 0; i < binary.length; i++) {
-            curr = binary[i];
+        for(int i = 0; i < result.length; i++) {
+            curr = input[i];
 
             // As long as the length of curr is less than 7
             while(curr.length() < 7) {
                 curr = 0 + curr;
             }
-            binary[i] = curr;
+            result[i] = curr;
         }
 
-        return binary;
+        return result;
     }
 
     /* Method for shifting right 3 bits
@@ -88,26 +85,25 @@ public class Conversions {
      * The last three of the last binary string will go to the
      * beginning of the first binary string
      */
-    public static String[] rightShift(String input) {
-        // Calls the method to convert the input into a padded binary string
-        String[] padded = padding(input);
+    public static String[] rightShift(String[] input) {
+        String[] result = new String[input.length];
 
         // Gets the last three digits of the first binary string
-        String lastThree = padded[0].substring(padded[0].length() - 3);
+        String lastThree = input[0].substring(input[0].length() - 3);
         String temp = "";
-        for(int i = 1; i < padded.length; i++) {
+        for(int i = 1; i < result.length; i++) {
             // Gets the last three digits of the current binary string
-            temp = padded[i].substring(padded[i].length() - 3);
+            temp = input[i].substring(input[i].length() - 3);
 
             // Adds three digits to the current binary string and cuts off the last three
-            padded[i] = lastThree + padded[i].substring(0, padded[i].length() - 3);
+            result[i] = lastThree + input[i].substring(0, input[i].length() - 3);
             
             // Sets lastThree to temp
             lastThree = temp;
         }
-        padded[0] = lastThree + padded[0].substring(0, padded[0].length() - 3);
+        result[0] = lastThree + input[0].substring(0, input[0].length() - 3);
 
-        return padded;
+        return result;
     }
 
     /* Undoes the right shift done to the plaintext
@@ -145,7 +141,6 @@ public class Conversions {
         String[] result = new String[arr.length / 7];
 
         Arrays.fill(result, "");
-
         for(int i = 0; i < arr.length; i++) {
             while(i % 7 != 0) {
                 result[i/7] += Integer.toString(arr[i]);

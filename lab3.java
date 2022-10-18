@@ -16,8 +16,19 @@ class lab3 {
         // Used for generating ivs when making our encryption methods
         // System.out.println("Random IV: " + Arrays.toString(iv));
 
-        String[] plaintext = Conversions.rightShift(block); // Creating the plaintext
-        String[] formalKey = Conversions.padding(key); // Creating the key
+        /* Calls to the Conversions class
+         * Makes it easier to understand what exactly
+         * the Conversions class does, and how the
+         * plaintext and key are formatted
+         */
+        int[] blockArray = Conversions.convertToASCII(block); // Converts the plaintext to ASCII
+        String[] blockBinary = Conversions.convertToBinary(blockArray); // Converts the plaintext to binary
+        String[] blockPadded = Conversions.padding(blockBinary); // Pads the plaintext
+        String[] plaintext = Conversions.rightShift(blockPadded); // Creating the plaintext
+        int[] keyArray = Conversions.convertToASCII(key); // Converts the key to ASCII
+        String[] keyBinary = Conversions.convertToBinary(keyArray); // Converts the plaintext to binary
+        String[] keyPadded = Conversions.padding(keyBinary); // Pads the key
+        String[] formalKey = Conversions.padding(keyPadded); // Creating the key
 
         /* Electronic Book Cipher
          * This block cipher encrypts the
