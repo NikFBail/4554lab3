@@ -1,7 +1,8 @@
 import java.util.Arrays;
 
 public class OFB {
-    
+    // The initialization vector
+    // Private as it shouldn't be referenced outside of this class
     private static int[] ofbIV = {0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1};
     private static String[] iv = Conversions.binaryToString(ofbIV);
 
@@ -19,6 +20,7 @@ public class OFB {
      * the key
      */
     public static String[] encryptDecryptOFB(String[] plaintext, String[] key) {
+        // Initializing variables
         int initVect = 0;
         int k = 0;
         int p = 0;
@@ -30,6 +32,7 @@ public class OFB {
         // Filling the arrays with "" so they aren't null
         Arrays.fill(encrypted, "");
         Arrays.fill(eBox, "");
+
         for(int i = 0; i < plaintext.length; i++) {
             for(int j = 0; j < plaintext[i].length(); j++) {
                 p = Integer.valueOf(plaintext[i].substring(j, j + 1));
@@ -41,6 +44,7 @@ public class OFB {
                     sum = XOR(initVect, k);
                     eBox[i] += Integer.toString(sum); // Storing the value of the eBox encryption
                 }
+
                 // Else use the value of the previous eBox fo encryption
                 else {
                     initVect = Integer.valueOf(eBox[i - 1].substring(j, j + 1));
@@ -55,16 +59,12 @@ public class OFB {
         return encrypted;
     }
 
-    /* Method for decrypting the
-     * Output Feedback
-     * 
-     */
-
     /* Main method for decryption
      * Calls upon the other methods
      * in this class to help decrypt
      */
     public static String decryptOFB(String[] encryption, String[] key) {
+        // Conversions from the Conversions class
         String[] decrypted = encryptDecryptOFB(encryption, key);
         String[] removeShift = Conversions.removeShift(decrypted);
         int[] ascii = Conversions.binaryToASCII(removeShift);

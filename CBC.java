@@ -1,7 +1,8 @@
 import java.util.Arrays;
 
 public class CBC {
-    
+    // The initialization vector
+    // Private as it shouldn't be referenced outside of this class
     private static int[] cbcIV = {0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1};
     private static String[] iv = Conversions.binaryToString(cbcIV);
 
@@ -16,30 +17,28 @@ public class CBC {
      * next input
      */
     public static String[] encryptCBC(String[] plaintext, String[] key) {
-        int initVect =0; // Holder for one digit in the binary string of iv
-        int k = 0; // Holder for one digit in the binary string of the key
-        int p = 0; // Holder for one digit in the binary string of plaintext
+        // Initializing variables
+        int initVect =0;
+        int k = 0;
+        int p = 0;
         int encrypt = 0;
         int sum = 0;
         String[] encrypted = new String[plaintext.length];
 
         // Filling the array with empty strings so it isn't filled with null values
         Arrays.fill(encrypted, "");
-        // Goes through the array
+
         for(int i = 0; i < plaintext.length; i++) {
-            // Goes through plaintext[i]
             for(int j = 0; j < plaintext[i].length(); j++) {
-                // Gets one digit of the binary string key
-                // Use i % key.length so the key will loop around
-                k = Integer.valueOf(key[i % key.length].substring(j, j + 1));
-                // Gets one digit of the binary string plaintext
                 p = Integer.valueOf(plaintext[i].substring(j, j + 1));
+                k = Integer.valueOf(key[i % key.length].substring(j, j + 1));
 
                 // If we should XOR the plaintext and the initial vector
                 if(i < iv.length) {
                     initVect = Integer.valueOf(iv[i].substring(j, j + 1));
                     sum = XOR(p, initVect);
                 }
+
                 // Otherwise XOR the plaintext with the last output, ie XOR x3 with y2
                 else {
                     // Getting the right digit of the previous output
@@ -64,30 +63,30 @@ public class CBC {
      * or XOR with the previous output
      */
     public static String[] decrypted(String[] encryption, String[] key) {
-        int k =0; // Holder for one digit in the binary string of key
-        int e = 0; // Holder for one digit in the binary string of encryption
-        int initVect = 0; // Holder for one digit in the binary string of iv
+        // Initializing variables
+        int k =0;
+        int e = 0;
+        int initVect = 0;
         int decrypt = 0;
         int sum = 0;
         String[] decrypted = new String[encryption.length];
 
         // Filling the array with empty strings to it isn't filled with null values
         Arrays.fill(decrypted, "");
+
         for(int i = 0; i < encryption.length; i++) {
             for(int j = 0; j < encryption[i].length(); j++) {
-
-                // Gets the integer value of one digit in the binary of encryption[i]
                 e = Integer.valueOf(encryption[i].substring(j, j + 1));
-
-                // Gets the integer value of one digit in the binary of key[i]
                 k = Integer.valueOf(key[i % key.length].substring(j, j + 1));
                 
                 sum = XOR(e, k);
+
                 // If we should XOR sum with the initialization vector
                 if(i < iv.length) {
                     initVect = Integer.valueOf(iv[i].substring(j, j + 1));
                     decrypt = XOR(sum, initVect);
                 }
+
                 // Otherwise XOR sum with the previous output, ie XOR y3 with x2
                 else {
                     initVect = Integer.valueOf(encryption[i - 1].substring(j, j + 1));
@@ -106,6 +105,7 @@ public class CBC {
      * in this class to help decrypt
      */
     public static String decryptCBC(String[] encryption, String[] key) {
+        // Conversions from the Conversions class
         String[] decrypted = decrypted(encryption, key);
         String[] removeShift = Conversions.removeShift(decrypted);
         int[] ascii = Conversions.binaryToASCII(removeShift);
