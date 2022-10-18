@@ -4,8 +4,8 @@ class lab3 {
 
     public static void main(String args[]) {
         // Block and key can only be 5 chars long
-        String block = "Hellojhdf";
-        String key = "a5Z#\t";
+        String block = "This is a test, please work.";
+        String key = "54321";
         System.out.println("The original message is: " + block);
         System.out.println("The key is: " + key);
         
@@ -48,8 +48,8 @@ class lab3 {
          */
         String[] encryptedCBC = CBC.encryptCBC(plaintext, formalKey); // Encrypting CBCwithIV with the key
         String decryptedCBC = CBC.decryptCBC(encryptedCBC, formalKey); // Decrypting the CBC encryption with the key
-        System.out.println("CBC Encryption: " + Arrays.toString(encryptedCBC));
-        System.out.println("CBC Decryption: " + decryptedCBC);
+        // System.out.println("CBC Encryption: " + Arrays.toString(encryptedCBC));
+        // System.out.println("CBC Decryption: " + decryptedCBC);
 
         /* Cipher Feedback
          * This block cipher encrypts
@@ -59,8 +59,8 @@ class lab3 {
          */
         String[] encryptedCFB = CFB.encryptCFB(plaintext, formalKey);
         String  decryptedCFB = CFB.decryptCFB(encryptedCFB, formalKey);
-        System.out.println("CFB Encryption: " + Arrays.toString(encryptedCFB));
-        System.out.println("CFB Decryption: " + decryptedCFB);
+        // System.out.println("CFB Encryption: " + Arrays.toString(encryptedCFB));
+        // System.out.println("CFB Decryption: " + decryptedCFB);
 
         /* Output Feedback
          * This block cipher encrypts
@@ -72,8 +72,8 @@ class lab3 {
          */
         String[] encryptedOFB = OFB.encryptDecryptOFB(plaintext, formalKey);
         String decryptedOFB = OFB.decryptOFB(encryptedOFB, formalKey);
-        System.out.println("OFB Encryption: " + Arrays.toString(encryptedOFB));
-        System.out.println("OFB Decryption: " + decryptedOFB);
+        // System.out.println("OFB Encryption: " + Arrays.toString(encryptedOFB));
+        // System.out.println("OFB Decryption: " + decryptedOFB);
 
     }
 
