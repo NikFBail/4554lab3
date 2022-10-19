@@ -169,7 +169,7 @@ public class Conversions {
     // XOR method
     public static int XOR(int x1, int x2) {
         int sum = 0;
-        sum = (x1 + x2) % 2;
+        sum = (x1 + x2) % 2; // The actual XOR process
         return sum;
     }
 
@@ -186,8 +186,10 @@ public class Conversions {
         text = Conversions.rightShift(text);
 
         Arrays.fill(result, "");
+
         for(int i = 0; i < text.length; i++) {
             for(int j = 0; j < text[i].length(); j++) {
+                // Getting integer values of strings
                 textVal = Integer.valueOf(text[i].substring(j, j + 1));
                 keyVal = Integer.valueOf(key[i % key.length].substring(j, j + 1));
 
@@ -210,8 +212,10 @@ public class Conversions {
         String[] result = new String[text.length];
 
         Arrays.fill(result, "");
+
         for(int i = 0; i < text.length; i++) {
             for(int j = 0; j < text[i].length(); j++) {
+                // Getting integer values of strings
                 textVal = Integer.valueOf(text[i].substring(j, j + 1));
                 keyVal = Integer.valueOf(key[i % key.length].substring(j, j + 1));
                 
