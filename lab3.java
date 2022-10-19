@@ -27,8 +27,8 @@ class lab3 {
         String[] blockBinary = Conversions.convertToBinary(blockArray); // Converts the plaintext to binary
         int[] keyArray = Conversions.convertToASCII(key); // Converts the key to ASCII
         String[] keyBinary = Conversions.convertToBinary(keyArray); // Converts the plaintext to binary
-        String[] keyPadded = Conversions.padding(keyBinary); // Pads the key
-        String[] formalKey = Conversions.padding(keyPadded); // Creating the key
+        String[] formalKey = Conversions.padding(keyBinary); // Pads the key, final step
+        
 
         /* Electronic Book Cipher
          * This block cipher encrypts the
@@ -47,7 +47,7 @@ class lab3 {
          * with the key
          */
         String[] encryptedCBC = CBC.encryptCBC(blockBinary, formalKey); // Encrypting CBCwithIV with the key
-        String decryptedCBC = CBC.decryptCBC(encryptedCBC, formalKey); // Decrypting the CBC encryption with the key
+        String decryptedCBC = CBC.decrypted(encryptedCBC, formalKey); // Decrypting the CBC encryption with the key
         System.out.println("CBC Encryption: " + Arrays.toString(encryptedCBC));
         System.out.println("CBC Decryption: " + decryptedCBC);
 

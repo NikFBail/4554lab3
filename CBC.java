@@ -20,9 +20,7 @@ public class CBC {
         String[] blockPadded = Conversions.padding(block); // Pads the plaintext
         // Initializing variables
         int initVect =0;
-        int k = 0;
         int p = 0;
-        int encrypt = 0;
         int sum = 0;
         String[] encrypted = new String[blockPadded.length];
 
@@ -32,7 +30,6 @@ public class CBC {
         for(int i = 0; i < blockPadded.length; i++) {
             for(int j = 0; j < blockPadded[i].length(); j++) {
                 p = Integer.valueOf(blockPadded[i].substring(j, j + 1));
-                k = Integer.valueOf(key[i % key.length].substring(j, j + 1));
 
                 // If we should XOR the plaintext and the initial vector
                 if(i < iv.length) {
@@ -54,15 +51,59 @@ public class CBC {
         return encrypted;
     }
 
+    
+
+    /* Method for decrypting using
+     * the cipher block chaining method
+     * Decrypt the input with the key,
+     * and either XOR with the initial vector
+     * (for the first input)
+     * or XOR with the previous output
+     */
+    public static String decrypted(String[] encryption, String[] key) {
+        // Initializing variables
+        int d = 0;
+        int initVect = 0;
+        int decrypt = 0;
+        String[] decrypted = new String[encryption.length];
+        String result = "";
+
+        // Filling the array with empty strings to it isn't filled with null values
+        Arrays.fill(decrypted, "");
+        decrypted = decryptCBC(encryption, key);
+
+        for(int i = 0; i < encryption.length; i++) {
+            for(int j = 0; j < encryption[i].length(); j++) {
+                d = Integer.valueOf(decrypted[i].substring(j, j + 1));
+
+                // If we should XOR sum with the initialization vector
+                if(i < iv.length) {
+                    initVect = Integer.valueOf(iv[i].substring(j, j + 1));
+                    decrypt = XOR(d, initVect);
+                }
+
+                // Otherwise XOR sum with the previous output, ie XOR y3 with x2
+                else {
+                    initVect = Integer.valueOf(encryption[i - 1].substring(j, j + 1));
+                    decrypt = XOR(d, initVect);
+                }
+
+                decrypted [i] += Integer.toString(decrypt);
+            }
+        }
+        result = Conversions.asciiToChar(Conversions.binaryToASCII(decrypted));
+        return result;
+    }
+
     // Encryption box operations
     // What happens in the Ebox stays in the Ebox
     public static String[] eBox(String[] text, String[] key) {
         // Initializing variables
         int keyVal = 0;
         int textVal = 0;
+        int sum = 0;
         String[] result = new String[text.length];
 
-        System.out.println(Arrays.toString(text));
         // Doing the right shift
         text = Conversions.rightShift(text);
 
@@ -72,69 +113,36 @@ public class CBC {
                 textVal = Integer.valueOf(text[i].substring(j, j + 1));
                 keyVal = Integer.valueOf(key[i % key.length].substring(j, j + 1));
 
-                result[i] += Integer.toString(XOR(textVal, keyVal));
+                sum = XOR(textVal, keyVal);
+                result[i] += Integer.toString(sum);
             }
         }
         return result;
     }
 
-    /* Method for decrypting using
-     * the cipher block chaining method
-     * Decrypt the input with the key,
-     * and either XOR with the initial vector
-     * (for the first input)
-     * or XOR with the previous output
+    /* Does the inverse of the eBox
+     * XOR's, then removes the
+     * right shift
      */
-    public static String[] decrypted(String[] encryption, String[] key) {
+    public static String[] decryptCBC(String[] text, String[] key) {
         // Initializing variables
-        int k =0;
-        int e = 0;
-        int initVect = 0;
-        int decrypt = 0;
+        int keyVal = 0;
+        int textVal = 0;
         int sum = 0;
-        String[] decrypted = new String[encryption.length];
+        String[] result = new String[text.length];
 
-        // Filling the array with empty strings to it isn't filled with null values
-        Arrays.fill(decrypted, "");
-
-        for(int i = 0; i < encryption.length; i++) {
-            for(int j = 0; j < encryption[i].length(); j++) {
-                e = Integer.valueOf(encryption[i].substring(j, j + 1));
-                k = Integer.valueOf(key[i % key.length].substring(j, j + 1));
+        Arrays.fill(result, "");
+        for(int i = 0; i < text.length; i++) {
+            for(int j = 0; j < text[i].length(); j++) {
+                textVal = Integer.valueOf(text[i].substring(j, j + 1));
+                keyVal = Integer.valueOf(key[i % key.length].substring(j, j + 1));
                 
-                sum = XOR(e, k);
-
-                // If we should XOR sum with the initialization vector
-                if(i < iv.length) {
-                    initVect = Integer.valueOf(iv[i].substring(j, j + 1));
-                    decrypt = XOR(sum, initVect);
-                }
-
-                // Otherwise XOR sum with the previous output, ie XOR y3 with x2
-                else {
-                    initVect = Integer.valueOf(encryption[i - 1].substring(j, j + 1));
-                    decrypt = XOR(sum, initVect);
-                }
-
-                decrypted [i] += Integer.toString(decrypt);
+                sum = XOR(textVal, keyVal);
+                result[i] += Integer.toString(sum);
             }
         }
-
-        return decrypted;
-    }
-
-    /* Main method for decryption
-     * Calls upon the other methods
-     * in this class to help decrypt
-     */
-    public static String decryptCBC(String[] encryption, String[] key) {
-        // Conversions from the Conversions class
-        String[] decrypted = decrypted(encryption, key);
-        String[] removeShift = Conversions.removeShift(decrypted);
-        int[] ascii = Conversions.binaryToASCII(removeShift);
-        String word = Conversions.asciiToChar(ascii);
-
-        return word;
+        result = Conversions.rightShift(result);
+        return result;
     }
 
     // XOR method
