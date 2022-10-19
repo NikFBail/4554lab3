@@ -16,21 +16,22 @@ public class CBC {
      * The output is then xor-ed with the
      * next input
      */
-    public static String[] encryptCBC(String[] plaintext, String[] key) {
+    public static String[] encryptCBC(String[] block, String[] key) {
+        String[] blockPadded = Conversions.padding(block); // Pads the plaintext
         // Initializing variables
         int initVect =0;
         int k = 0;
         int p = 0;
         int encrypt = 0;
         int sum = 0;
-        String[] encrypted = new String[plaintext.length];
+        String[] encrypted = new String[blockPadded.length];
 
         // Filling the array with empty strings so it isn't filled with null values
         Arrays.fill(encrypted, "");
 
-        for(int i = 0; i < plaintext.length; i++) {
-            for(int j = 0; j < plaintext[i].length(); j++) {
-                p = Integer.valueOf(plaintext[i].substring(j, j + 1));
+        for(int i = 0; i < blockPadded.length; i++) {
+            for(int j = 0; j < blockPadded[i].length(); j++) {
+                p = Integer.valueOf(blockPadded[i].substring(j, j + 1));
                 k = Integer.valueOf(key[i % key.length].substring(j, j + 1));
 
                 // If we should XOR the plaintext and the initial vector
@@ -45,14 +46,36 @@ public class CBC {
                     initVect = Integer.valueOf(encrypted[i - 1].substring(j, j + 1));
                     sum = XOR(p, initVect);
                 }
+                encrypted[i] += Integer.toString(sum);
+            }
+            
+        }
+        encrypted = eBox(encrypted, key);
+        return encrypted;
+    }
 
-                encrypt = XOR(sum, k);
-                encrypted[i] += Integer.toString(encrypt);
+    // Encryption box operations
+    // What happens in the Ebox stays in the Ebox
+    public static String[] eBox(String[] text, String[] key) {
+        // Initializing variables
+        int keyVal = 0;
+        int textVal = 0;
+        String[] result = new String[text.length];
 
+        System.out.println(Arrays.toString(text));
+        // Doing the right shift
+        text = Conversions.rightShift(text);
+
+        Arrays.fill(result, "");
+        for(int i = 0; i < text.length; i++) {
+            for(int j = 0; j < text[i].length(); j++) {
+                textVal = Integer.valueOf(text[i].substring(j, j + 1));
+                keyVal = Integer.valueOf(key[i % key.length].substring(j, j + 1));
+
+                result[i] += Integer.toString(XOR(textVal, keyVal));
             }
         }
-
-        return encrypted;
+        return result;
     }
 
     /* Method for decrypting using

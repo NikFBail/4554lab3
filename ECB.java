@@ -8,7 +8,11 @@ public class ECB {
      * Takes two binary string arrays
      * and adds them together
      */
-    public static String[] encrypted(String[] plaintext, String[] key) {
+    public static String[] encrypted(String[] block, String[] key) {
+        // Conversions from the Conversions class
+        String[] blockPadded = Conversions.padding(block); // Pads the plaintext
+        String[] plaintext = Conversions.rightShift(blockPadded); // Creating the plaintext
+
         // Initializing variables
         int k =0; // Holder for one digit in the binary string of key
         int p = 0; // Holder for one digit in the binary string of plaintext
