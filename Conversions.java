@@ -165,5 +165,62 @@ public class Conversions {
 
         return iv;
     }
+
+    // XOR method
+    public static int XOR(int x1, int x2) {
+        int sum = 0;
+        sum = (x1 + x2) % 2;
+        return sum;
+    }
+
+    // Encryption box operations
+    // What happens in the Ebox stays in the Ebox
+    public static String[] eBox(String[] text, String[] key) {
+        // Initializing variables
+        int keyVal = 0;
+        int textVal = 0;
+        int sum = 0;
+        String[] result = new String[text.length];
+
+        // Doing the right shift
+        text = Conversions.rightShift(text);
+
+        Arrays.fill(result, "");
+        for(int i = 0; i < text.length; i++) {
+            for(int j = 0; j < text[i].length(); j++) {
+                textVal = Integer.valueOf(text[i].substring(j, j + 1));
+                keyVal = Integer.valueOf(key[i % key.length].substring(j, j + 1));
+
+                sum = XOR(textVal, keyVal);
+                result[i] += Integer.toString(sum);
+            }
+        }
+        return result;
+    }
+
+    /* Does the inverse of the eBox
+     * XOR's, then removes the
+     * right shift
+     */
+    public static String[] deBox(String[] text, String[] key) {
+        // Initializing variables
+        int keyVal = 0;
+        int textVal = 0;
+        int sum = 0;
+        String[] result = new String[text.length];
+
+        Arrays.fill(result, "");
+        for(int i = 0; i < text.length; i++) {
+            for(int j = 0; j < text[i].length(); j++) {
+                textVal = Integer.valueOf(text[i].substring(j, j + 1));
+                keyVal = Integer.valueOf(key[i % key.length].substring(j, j + 1));
+                
+                sum = XOR(textVal, keyVal);
+                result[i] += Integer.toString(sum);
+            }
+        }
+        result = Conversions.removeShift(result);
+        return result;
+    }
     
 }
