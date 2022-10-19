@@ -141,7 +141,7 @@ public class CBC {
                 result[i] += Integer.toString(sum);
             }
         }
-        result = Conversions.rightShift(result);
+        result = Conversions.removeShift(result);
         return result;
     }
 
