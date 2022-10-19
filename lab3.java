@@ -37,8 +37,8 @@ class lab3 {
          */
         String[] encrypted = ECB.encrypted(plaintext, formalKey); // Creating the encryption in binary form
         String decrypted = ECB.decrypt(encrypted, formalKey); // Calling the decryption class to decrypt
-        System.out.println("ECB Encryption: " + Arrays.toString(encrypted));
-        System.out.println("ECB Decryption: " + decrypted);
+        // System.out.println("ECB Encryption: " + Arrays.toString(encrypted));
+        // System.out.println("ECB Decryption: " + decrypted);
 
         /* Cipher Block Chaining
          * This block cipher XORs
@@ -74,6 +74,19 @@ class lab3 {
         String decryptedOFB = OFB.decryptOFB(encryptedOFB, formalKey);
         // System.out.println("OFB Encryption: " + Arrays.toString(encryptedOFB));
         // System.out.println("OFB Decryption: " + decryptedOFB);
+
+        /* Counter Mode
+         * This block cipher encrypts
+         * an iv that has a counter
+         * on it, with the key
+         * The result is then XOR-ed with
+         * the plaintext to get the output,
+         * the encrypted text
+         */
+        // String[] encryptedCTR = CTR.encryptDecryptCTR(plaintext, formalKey);
+        // String decryptedCTR = CTR.decryptCTR(encryptedCTR, formalKey);
+        // System.out.println("CTR Encryption: " + Arrays.toString(encryptedCTR));
+        // System.out.println("CTR Decryption: " + decryptedCTR);
 
     }
 
