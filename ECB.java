@@ -38,7 +38,7 @@ public class ECB {
             counter++;
         }
 
-        decrypted = Conversions.removeShift(decrypted);  
+        decrypted = Conversions.removeShift(decrypted, counter);  
         ascii = Conversions.binaryToASCII(decrypted);
         word = Conversions.asciiToChar(ascii);
         return word;
