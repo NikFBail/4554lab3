@@ -11,7 +11,6 @@ public class Conversions {
         for(int i = 0; i < input.length; i++) {
             result += (char) input[i];
         }
-
         return result;
     }
 
@@ -27,7 +26,6 @@ public class Conversions {
             num = (int) (input.charAt(i));
             result[i] = num;
         }
-        
         return result;
     }
 
@@ -39,7 +37,6 @@ public class Conversions {
             // Converts to decimal, which is what ASCII is
             result[i] = Integer.parseInt(input[i], 2);
         }
-
         return result;
     }
 
@@ -54,7 +51,6 @@ public class Conversions {
             // Converts value of ascii[i] into a binary string
             result[i] = Integer.toBinaryString(input[i]);
         }
-
         return result;
     }
 
@@ -75,7 +71,6 @@ public class Conversions {
             }
             result[i] = curr;
         }
-
         return result;
     }
 
@@ -102,7 +97,6 @@ public class Conversions {
             lastThree = temp;
         }
         result[0] = lastThree + input[0].substring(0, input[0].length() - 3);
-
         return result;
     }
 
@@ -129,7 +123,6 @@ public class Conversions {
             // Sets firstThree to temp
             firstThree = temp;
         }
-
         return input;
     }
 
@@ -151,7 +144,6 @@ public class Conversions {
         for (int j = 0; j<arr.length; j+=7) {
             result[j/7] = Integer.toString(arr[j]) + result[j/7];
         }
-
         return result;
     }
 
@@ -162,7 +154,6 @@ public class Conversions {
         for(int i = 0; i < iv.length; i++) {
             iv[i] = (int) Math.round(Math.random());
         }
-
         return iv;
     }
 
@@ -175,7 +166,7 @@ public class Conversions {
 
     // Encryption box operations
     // What happens in the Ebox stays in the Ebox
-    public static String[] eBox(String[] text, String[] key) {
+    public static String eBox(String[] text, String[] key, int counter) {
         // Initializing variables
         int keyVal = 0;
         int textVal = 0;
@@ -187,24 +178,22 @@ public class Conversions {
 
         Arrays.fill(result, "");
 
-        for(int i = 0; i < text.length; i++) {
-            for(int j = 0; j < text[i].length(); j++) {
-                // Getting integer values of strings
-                textVal = Integer.valueOf(text[i].substring(j, j + 1));
-                keyVal = Integer.valueOf(key[i % key.length].substring(j, j + 1));
+        for(int i = 0; i < text[counter].length(); i++) {
+            // Getting integer values of strings
+            textVal = Integer.valueOf(text[counter].substring(i, i + 1));
+            keyVal = Integer.valueOf(key[(i + counter) % key.length].substring(i, i + 1));
 
-                sum = XOR(textVal, keyVal);
-                result[i] += Integer.toString(sum);
-            }
+            sum = XOR(textVal, keyVal);
+            result[counter] += Integer.toString(sum);
         }
-        return result;
+        return result[counter];
     }
 
     /* Does the inverse of the eBox
      * XOR's, then removes the
      * right shift
      */
-    public static String[] deBox(String[] text, String[] key) {
+    public static String deBox(String[] text, String[] key, int counter) {
         // Initializing variables
         int keyVal = 0;
         int textVal = 0;
@@ -213,18 +202,14 @@ public class Conversions {
 
         Arrays.fill(result, "");
 
-        for(int i = 0; i < text.length; i++) {
-            for(int j = 0; j < text[i].length(); j++) {
-                // Getting integer values of strings
-                textVal = Integer.valueOf(text[i].substring(j, j + 1));
-                keyVal = Integer.valueOf(key[i % key.length].substring(j, j + 1));
+        for(int i = 0; i < text[counter].length(); i++) {
+            // Getting integer values of strings
+            textVal = Integer.valueOf(text[counter].substring(i, i + 1));
+            keyVal = Integer.valueOf(key[(i + counter) % key.length].substring(i, i + 1));
                 
-                sum = XOR(textVal, keyVal);
-                result[i] += Integer.toString(sum);
-            }
+            sum = XOR(textVal, keyVal);
+            result[counter] += Integer.toString(sum);
         }
-        result = Conversions.removeShift(result);
-        return result;
-    }
-    
+        return result[counter];
+    } 
 }

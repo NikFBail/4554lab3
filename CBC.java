@@ -23,6 +23,7 @@ public class CBC {
         int p = 0;
         int sum = 0;
         String[] encrypted = new String[blockPadded.length];
+        int counter = 0;
 
         // Filling the array with empty strings so it isn't filled with null values
         Arrays.fill(encrypted, "");
@@ -45,8 +46,9 @@ public class CBC {
                 }
                 encrypted[i] += Integer.toString(sum);
             }
+            encrypted = Conversions.eBox(encrypted[i], key, counter);
         }
-        encrypted = Conversions.eBox(encrypted, key);
+        
         return encrypted;
     }
 

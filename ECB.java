@@ -11,8 +11,13 @@ public class ECB {
         // Conversions from the Conversions class
         String[] blockPadded = Conversions.padding(block); // Pads the plaintext
         String[] encrypted = new String[block.length];
-
-        encrypted = Conversions.eBox(blockPadded, key);
+        int counter = 0;
+        
+        for(int i = 0; i < blockPadded.length; i++) {
+            encrypted[i] = Conversions.eBox(blockPadded, key, counter);
+            counter++;
+        }
+        
         return encrypted;
     }
 
@@ -26,8 +31,14 @@ public class ECB {
         String[] decrypted = new String[encryption.length];
         int[] ascii = new int[decrypted.length];
         String word = "";
+        int counter = 0;
 
-        decrypted = Conversions.deBox(encryption, key);
+        for(int i = 0; i < encryption.length; i++) {
+            decrypted[i] = Conversions.deBox(encryption, key, counter);
+            counter++;
+        }
+
+        decrypted = Conversions.removeShift(decrypted);  
         ascii = Conversions.binaryToASCII(decrypted);
         word = Conversions.asciiToChar(ascii);
         return word;

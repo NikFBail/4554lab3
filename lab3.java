@@ -10,7 +10,7 @@ class lab3 {
         System.out.println("The key is: " + key);
         
         // Random iv generator
-        int[] iv = Conversions.ivGenerator();
+        // int[] iv = Conversions.ivGenerator();
 
         // Prints out a randomly generated 35 bit iv string
         // Used for generating ivs when making our encryption methods
@@ -48,8 +48,8 @@ class lab3 {
          */
         String[] encryptedCBC = CBC.encryptCBC(blockBinary, formalKey); // Encrypting CBCwithIV with the key
         String decryptedCBC = CBC.decryptedCBC(encryptedCBC, formalKey); // Decrypting the CBC encryption with the key
-        System.out.println("CBC Encryption: " + Arrays.toString(encryptedCBC));
-        System.out.println("CBC Decryption: " + decryptedCBC);
+        // System.out.println("CBC Encryption: " + Arrays.toString(encryptedCBC));
+        // System.out.println("CBC Decryption: " + decryptedCBC);
 
         /* Cipher Feedback
          * This block cipher encrypts
