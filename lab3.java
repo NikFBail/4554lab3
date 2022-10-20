@@ -48,8 +48,8 @@ class lab3 {
          */
         String[] encryptedCBC = CBC.encryptCBC(blockBinary, formalKey); // Encrypting CBCwithIV with the key
         String decryptedCBC = CBC.decryptedCBC(encryptedCBC, formalKey); // Decrypting the CBC encryption with the key
-        // System.out.println("CBC Encryption: " + Arrays.toString(encryptedCBC));
-        // System.out.println("CBC Decryption: " + decryptedCBC);
+        System.out.println("CBC Encryption: " + Arrays.toString(encryptedCBC));
+        System.out.println("CBC Decryption: " + decryptedCBC);
 
         /* Cipher Feedback
          * This block cipher encrypts

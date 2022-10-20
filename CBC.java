@@ -23,11 +23,11 @@ public class CBC {
         int p = 0;
         int sum = 0;
         String[] encrypted = new String[blockPadded.length];
+        String[] temp = new String[blockPadded.length];
         int counter = 0;
 
         // Filling the array with empty strings so it isn't filled with null values
         Arrays.fill(encrypted, "");
-
         for(int i = 0; i < blockPadded.length; i++) {
             for(int j = 0; j < blockPadded[i].length(); j++) {
                 p = Integer.valueOf(blockPadded[i].substring(j, j + 1));
@@ -44,9 +44,13 @@ public class CBC {
                     initVect = Integer.valueOf(encrypted[i - 1].substring(j, j + 1));
                     sum = Conversions.XOR(p, initVect);
                 }
-                encrypted[i] += Integer.toString(sum);
+                temp[i] += Integer.toString(sum);
             }
-            encrypted = Conversions.eBox(encrypted[i], key, counter);
+        }
+
+        for(int i = 0; i < encrypted.length; i++) {
+            encrypted[i] = Conversions.eBox(encrypted, key, counter);
+            counter++;
         }
         
         return encrypted;
@@ -68,12 +72,15 @@ public class CBC {
         int sum = 0;
         String[] decrypted = new String[encryption.length];
         String result = "";
+        int counter = 0;
 
         // Filling the array with empty strings to it isn't filled with null values
         Arrays.fill(decrypted, "");
-        decrypted = Conversions.deBox(encryption, key);
+        
 
         for(int i = 0; i < encryption.length; i++) {
+            decrypted[i] = Conversions.deBox(encryption, key, counter);
+            counter++;
             for(int j = 0; j < encryption[i].length(); j++) {
                 decryptVal = Integer.valueOf(decrypted[i].substring(j, j + 1));
 
