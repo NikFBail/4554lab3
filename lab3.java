@@ -35,10 +35,10 @@ class lab3 {
          * key with the plaintext, no extra
          * steps
          */
-        String[] encrypted = ECB.encrypted(blockBinary, formalKey); // Creating the encryption in binary form
-        String decrypted = ECB.decrypt(encrypted, formalKey); // Calling the decryption class to decrypt
-        // System.out.println("ECB Encryption: " + Arrays.toString(encrypted));
-        // System.out.println("ECB Decryption: " + decrypted);
+        String[] encrypted = ECB.encryptedECB(blockBinary, formalKey); // Creating the encryption in binary form
+        String decrypted = ECB.decryptedECB(encrypted, formalKey); // Calling the decryption class to decrypt
+        System.out.println("ECB Encryption: " + Arrays.toString(encrypted));
+        System.out.println("ECB Decryption: " + decrypted);
 
         /* Cipher Block Chaining
          * This block cipher XORs
