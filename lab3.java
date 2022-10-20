@@ -37,8 +37,8 @@ class lab3 {
          */
         String[] encrypted = ECB.encryptedECB(blockBinary, formalKey); // Creating the encryption in binary form
         String decrypted = ECB.decryptedECB(encrypted, formalKey); // Calling the decryption class to decrypt
-        System.out.println("ECB Encryption: " + Arrays.toString(encrypted));
-        System.out.println("ECB Decryption: " + decrypted);
+        // System.out.println("ECB Encryption: " + Arrays.toString(encrypted));
+        // System.out.println("ECB Decryption: " + decrypted);
 
         /* Cipher Block Chaining
          * This block cipher XORs
@@ -47,7 +47,7 @@ class lab3 {
          * with the key
          */
         String[] encryptedCBC = CBC.encryptCBC(blockBinary, formalKey); // Encrypting CBCwithIV with the key
-        String decryptedCBC = CBC.decrypted(encryptedCBC, formalKey); // Decrypting the CBC encryption with the key
+        String decryptedCBC = CBC.decryptedCBC(encryptedCBC, formalKey); // Decrypting the CBC encryption with the key
         System.out.println("CBC Encryption: " + Arrays.toString(encryptedCBC));
         System.out.println("CBC Decryption: " + decryptedCBC);
 

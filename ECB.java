@@ -2,11 +2,10 @@ import java.util.Arrays;
 
 public class ECB {
 
-    /* Method for adding the
-     * key and plaintext together
-     * to encrypt the plaintext
-     * Takes two binary string arrays
-     * and adds them together
+    /* Method for encrypting using
+     * the Electronic Code Book method
+     * Just encrypts the input with the key
+     * to produce the encryption
      */
     public static String[] encryptedECB(String[] block, String[] key) {
         // Conversions from the Conversions class
@@ -19,9 +18,8 @@ public class ECB {
 
     /* Method for decrypting using
      * the Electronic Code Book method
-     * For decryption, the encrypted text
-     * is the input, and the output will
-     * be the original plaintext
+     * For decryption, use the inverse
+     * of encryption with the key
      */
     public static String decryptedECB(String[] encryption, String[] key) {
         // Initializing variables
@@ -33,12 +31,5 @@ public class ECB {
         ascii = Conversions.binaryToASCII(decrypted);
         word = Conversions.asciiToChar(ascii);
         return word;
-    }
-
-    // XOR method
-    public static int XOR(int x1, int x2) {
-        int sum = 0;
-        sum = (x1 + x2) % 2;
-        return sum;
     }
 }
