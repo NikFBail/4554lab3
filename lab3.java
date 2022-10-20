@@ -4,8 +4,8 @@ class lab3 {
 
     public static void main(String args[]) {
         // Block and key can only be 5 chars long
-        String block = "This is a test, please work.";
-        String key = "54321";
+        String block = "Hello";
+        String key = "a5Z#\t";
         System.out.println("The original message is: " + block);
         System.out.println("The key is: " + key);
         
