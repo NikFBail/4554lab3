@@ -36,8 +36,9 @@ class lab3 {
          * steps
          */
         String[] encrypted = ECB.encryptedECB(blockBinary, formalKey); // Creating the encryption in binary form
-        String decrypted = ECB.decryptedECB(encrypted, formalKey); // Calling the decryption class to decrypt
         System.out.println("ECB Encryption: " + Arrays.toString(encrypted));
+        String decrypted = ECB.decryptedECB(encrypted, formalKey); // Calling the decryption class to decrypt
+        
         System.out.println("ECB Decryption: " + decrypted);
 
         /* Cipher Block Chaining

@@ -129,21 +129,22 @@ public class Conversions {
      * string[0], add them to the end of the last binary
      * string in the array
      */
-    public static String[] removeShift(String[] input, int counter) {
+    public static String removeShift(String[] input, int counter) {
         // Gets the first three digits of the first binary string
         String firstThree = input[0].substring(0, 3);
         String temp = "";
-        for(int i = input.length - 1; i >= 0; i--) {
 
-            // Gets the first three digits of the current binary string
-            temp = input[i].substring(0, 3);
-
-            // Adds three digits to the current binary string and cuts off the first three
-            input[i] = input[i].substring(3) + firstThree;
-            
-            // Sets firstThree to temp
-            firstThree = temp;
+        if(counter == input.length) {
+            String prevFirstThree = 
         }
+        // Gets the first three digits of the current binary string
+        temp = input[i].substring(0, 3);
+
+        // Adds three digits to the current binary string and cuts off the first three
+        input[i] = input[i].substring(3) + firstThree;
+            
+        // Sets firstThree to temp
+        firstThree = temp;
         return input;
     }
 
@@ -205,11 +206,12 @@ public class Conversions {
         for(int i = 0; i < text[counter].length(); i++) {
             // Getting integer values of strings
             textVal = Integer.valueOf(text[counter].substring(i, i + 1));
-            keyVal = Integer.valueOf(key[(i + counter) % key.length].substring(i, i + 1));
+            keyVal = Integer.valueOf(key[counter].substring(i, i + 1));
                 
             sum = XOR(textVal, keyVal);
             result[counter] += Integer.toString(sum);
         }
+
         return result[counter];
     } 
 }
