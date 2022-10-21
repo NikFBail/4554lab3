@@ -3,8 +3,7 @@ import java.util.Arrays;
 public class CBC {
     // The initialization vector
     // Private as it shouldn't be referenced outside of this class
-    private static int[] cbcIV = {0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1};
-    private static String[] iv = Conversions.binaryToString(cbcIV);
+    private static char[] cbcIV = {0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1};
 
     /* Method for
      * encrypting using cipher block chaining
@@ -16,44 +15,25 @@ public class CBC {
      * The output is then xor-ed with the
      * next input
      */
-    public static String[] encryptCBC(String[] block, String[] key) {
-        String[] blockPadded = Conversions.padding(block); // Pads the plaintext
+    public static String encryptCBC(String text, String key) {
         // Initializing variables
-        int initVect =0;
-        int p = 0;
-        int sum = 0;
-        String[] encrypted = new String[blockPadded.length];
-        String[] temp = new String[blockPadded.length];
-        int counter = 0;
-
-        // Filling the array with empty strings so it isn't filled with null values
-        Arrays.fill(encrypted, "");
-        for(int i = 0; i < blockPadded.length; i++) {
-            for(int j = 0; j < blockPadded[i].length(); j++) {
-                p = Integer.valueOf(blockPadded[i].substring(j, j + 1));
-
-                // If we should XOR the plaintext and the initial vector
-                if(i < iv.length) {
-                    initVect = Integer.valueOf(iv[i].substring(j, j + 1));
-                    sum = Conversions.XOR(p, initVect);
-                }
-
-                // Otherwise XOR the plaintext with the last output, ie XOR x3 with y2
-                else {
-                    // Getting the right digit of the previous output
-                    initVect = Integer.valueOf(encrypted[i - 1].substring(j, j + 1));
-                    sum = Conversions.XOR(p, initVect);
-                }
-                temp[i] += Integer.toString(sum);
+        int runsCount = 0;
+        int remaining= text.length() % 5;
+        String result = "";
+        char[] input = text.toCharArray();
+        char[] keyChar = key.toCharArray();
+        char[][] splitInput = new char[runsCount][text.length()];
+        
+        // Split the data up into an array of arrays of 5 character blocks
+        for(int i = 0; i < runsCount; i++) {
+            for(int j = 0; j < text.length(); j++) {
+                splitInput[i][j] = input[i * 5 + j];
             }
         }
-
-        for(int i = 0; i < encrypted.length; i++) {
-            encrypted[i] = Conversions.eBox(encrypted, key, counter);
-            counter++;
-        }
         
-        return encrypted;
+        if()
+
+
     }
 
     

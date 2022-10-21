@@ -19,8 +19,10 @@ public class Conversions {
         return res;
     }
 
+    // Method for implementing the right shift on a char array
     public static char[] rightShift(char[] input) {
         int len = input.length;
+
         for(int i = 0; i < 3; i++) {
             char store = input[0];
             for(int j = 0; j < len; j++) {
@@ -32,8 +34,10 @@ public class Conversions {
         return input;
     }
 
+    // Method for implementing the left shift on a char array
     public static char[] leftShift(char[] input) {
         int len = input.length;
+
         for(int i = 0; i < 3; i++) {
             char store = input[len - 1];
             for(int j = input.length - 1; j >= 0; j--) {
@@ -45,6 +49,8 @@ public class Conversions {
         return input;
     }
 
+    // XOR Method
+    // Adds two integer values and mods 2
     public static char[] XOR(char[] input, char[] key) {
         int num = 0;
         int keyVal = 0;
@@ -73,13 +79,13 @@ public class Conversions {
      * right shift
      */
     public static String deBox(char[] text, char[] key) {
-        char[] deKeyd = new char[key.length];
-        deKeyd = XOR(text, key);
-        deKeyd = leftShift(deKeyd);
+        char[] unKey= new char[key.length];
+        unKey = XOR(text, key);
+        unKey = leftShift(unKey);
         String strRep = "";
         String res = "";
-        for (int i = 0; i < deKeyd.length; i++) {
-            strRep = strRep + deKeyd[i];
+        for (int i = 0; i < unKey.length; i++) {
+            strRep = strRep + unKey[i];
             if (strRep.length() == 7) {
                 int decimal = Integer.parseInt(strRep, 2);
                 res = res + (char) decimal;
