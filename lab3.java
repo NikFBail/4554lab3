@@ -1,11 +1,9 @@
-import java.util.Arrays;
-
 class lab3 {
 
     public static void main(String args[]) {
         // Block and key can only be 5 chars long
         String block = "Hello";
-        String key = "a5Z#\t";
+        String key = "11010101010100010101111010010010101";
         System.out.println("The original message is: " + block);
         System.out.println("The key is: " + key);
         
@@ -15,19 +13,6 @@ class lab3 {
         // Prints out a randomly generated 35 bit iv string
         // Used for generating ivs when making our encryption methods
         // System.out.println("Random IV: " + Arrays.toString(iv));
-
-        /* Calls to the Conversions class
-         * Makes it easier to understand what exactly
-         * the Conversions class does, and how the
-         * plaintext and key are formatted
-         * More conversions on the plaintext are done
-         * inside each block cipher class
-         */
-        int[] blockArray = Conversions.convertToASCII(block); // Converts the plaintext to ASCII
-        String[] blockBinary = Conversions.convertToBinary(blockArray); // Converts the plaintext to binary
-        int[] keyArray = Conversions.convertToASCII(key); // Converts the key to ASCII
-        String[] keyBinary = Conversions.convertToBinary(keyArray); // Converts the plaintext to binary
-        String[] formalKey = Conversions.padding(keyBinary); // Pads the key, final step
         
 
         /* Electronic Book Cipher
@@ -35,10 +20,9 @@ class lab3 {
          * key with the plaintext, no extra
          * steps
          */
-        String[] encrypted = ECB.encryptedECB(blockBinary, formalKey); // Creating the encryption in binary form
-        System.out.println("ECB Encryption: " + Arrays.toString(encrypted));
-        String decrypted = ECB.decryptedECB(encrypted, formalKey); // Calling the decryption class to decrypt
-        
+        String encrypted = ECB.encryptECB(block, key); // Creating the encryption in binary form
+        String decrypted = ECB.decryptECB(encrypted, key); // Calling the decryption class to decrypt
+        System.out.println("ECB Encryption: " + encrypted);
         System.out.println("ECB Decryption: " + decrypted);
 
         /* Cipher Block Chaining
@@ -47,8 +31,8 @@ class lab3 {
          * and then encrypts the result
          * with the key
          */
-        String[] encryptedCBC = CBC.encryptCBC(blockBinary, formalKey); // Encrypting CBCwithIV with the key
-        String decryptedCBC = CBC.decryptedCBC(encryptedCBC, formalKey); // Decrypting the CBC encryption with the key
+        // String[] encryptedCBC = CBC.encryptCBC(block, key);
+        // String decryptedCBC = CBC.decryptedCBC(encryptedCBC, key);
         // System.out.println("CBC Encryption: " + Arrays.toString(encryptedCBC));
         // System.out.println("CBC Decryption: " + decryptedCBC);
 
@@ -58,8 +42,8 @@ class lab3 {
          * then XORs the result with
          * the plaintext
          */
-        String[] encryptedCFB = CFB.encryptCFB(blockBinary, formalKey);
-        String  decryptedCFB = CFB.decryptCFB(encryptedCFB, formalKey);
+        // String[] encryptedCFB = CFB.encryptCFB(block, key);
+        // String  decryptedCFB = CFB.decryptCFB(encryptedCFB, key);
         // System.out.println("CFB Encryption: " + Arrays.toString(encryptedCFB));
         // System.out.println("CFB Decryption: " + decryptedCFB);
 
@@ -71,8 +55,8 @@ class lab3 {
          * then it XORS the result with
          * the input
          */
-        String[] encryptedOFB = OFB.encryptDecryptOFB(blockBinary, formalKey);
-        String decryptedOFB = OFB.decryptOFB(encryptedOFB, formalKey);
+        // String[] encryptedOFB = OFB.encryptDecryptOFB(block, key);
+        // String decryptedOFB = OFB.decryptOFB(encryptedOFB, key);
         // System.out.println("OFB Encryption: " + Arrays.toString(encryptedOFB));
         // System.out.println("OFB Decryption: " + decryptedOFB);
 

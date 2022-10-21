@@ -1,46 +1,60 @@
-import java.util.Arrays;
-
 public class ECB {
 
-    /* Method for encrypting using
-     * the Electronic Code Book method
-     * Just encrypts the input with the key
-     * to produce the encryption
-     */
-    public static String[] encryptedECB(String[] block, String[] key) {
-        // Conversions from the Conversions class
-        String[] blockPadded = Conversions.padding(block); // Pads the plaintext
-        String[] encrypted = new String[block.length];
-        int counter = 0;
-        
-        for(int i = 0; i < blockPadded.length; i++) {
-            encrypted[i] = Conversions.eBox(blockPadded, key, counter);
-            counter++;
+    public static String encryptECB(String text, String key) {
+        String result = "";
+        int runs = text.length() / 5;
+        char[] input = text.toCharArray();
+        char[][] splitInput = new char[runs][5];
+        int remaining= text.length() % 5;
+
+        // Split the data up into an array of arrays of 5 character blocks
+        for(int i = 0; i < runs; i++) {
+            for(int j = 0; j < 5; j++) {
+                splitInput[i][j] = input[i * 5 + j];
+            }
         }
-        
-        return encrypted;
+
+        // Encrypt every block with the key
+        for(int i = 0; i < runs; i++) {
+            String tempString = new String(Conversions.eBox(splitInput[i], key.toCharArray()));
+            result = result + tempString;
+        }
+
+        //Pad the last block with 0s if there is a remainder, and then finish off encrypting the result
+        if(remaining > 0) {
+            char[] remainingChars = new char[5];
+            for(int i = 0; i < 5; i++) {
+                if(i >= remaining) {
+                    remainingChars[i] = (char) 0;
+                } else {
+                    int clean = (runs * 5);
+                    remainingChars[i] = input[clean + i];
+                }
+
+            }
+            String tempString = new String(Conversions.eBox(remainingChars, key.toCharArray()));
+            result = result + tempString;
+        }
+        return result;
     }
 
-    /* Method for decrypting using
-     * the Electronic Code Book method
-     * For decryption, use the inverse
-     * of encryption with the key
-     */
-    public static String decryptedECB(String[] encryption, String[] key) {
-        // Initializing variables
-        String[] decrypted = new String[encryption.length];
-        int[] ascii = new int[decrypted.length];
-        String word = "";
-        int counter = 0;
+    public static String decryptECB(String input, String key) {
+        String result = "";
+        int runs = input.length() / 35;
+        char[] fullInput = input.toCharArray();
+        char[][] splitInput = new char[runs][35];
 
-        for(int i = 0; i < encryption.length; i++) {
-            decrypted[i] = Conversions.deBox(encryption, key, counter);
-            counter++;
+        //Split up the input into an array of arrays of 35 bit blocks
+        for(int i = 0; i < runs; i++) {
+            for(int j = 0; j < 35; j++) {
+                splitInput[i][j] = fullInput[i * 35 + j];
+            }
         }
-
-        decrypted = Conversions.removeShift(decrypted, counter);  
-        ascii = Conversions.binaryToASCII(decrypted);
-        word = Conversions.asciiToChar(ascii);
-        return word;
+        //For every array of 35 bit blocks, decrypt using the key and return the resulting character array
+        for(int i = 0; i < runs; i++) {
+            String tempString = new String(Conversions.deBox(splitInput[i], key.toCharArray()));
+            result = result + tempString;
+        }
+        return result;
     }
 }
