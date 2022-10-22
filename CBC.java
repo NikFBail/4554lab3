@@ -1,85 +1,95 @@
-import java.util.Arrays;
-
 public class CBC {
     // The initialization vector
     // Private as it shouldn't be referenced outside of this class
     private static char[] cbcIV = {0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1};
 
-    /* Method for
-     * encrypting using cipher block chaining
-     * First xor the input with either 
-     * the iv (only for the first input)
-     * or the output of the encryption
-     * of the previous input
-     * Then encrypt with the key
-     * The output is then xor-ed with the
-     * next input
+    /* Method of encryption using
+     * Cipher Block Chaining
+     * First XOR the input with either
+     * the iv or with the previous output
+     * Then encrypt the result to get the encryption
      */
-    public static String encryptCBC(String text, String key) {
-        // Initializing variables
-        int runsCount = 0;
-        int remaining= text.length() % 5;
+    public static String encryptCBC(String text, String key, String iv) {
+        int runsCount = text.length() / 5;
+        int remaining = text.length() % 5;
         String result = "";
+        String temp = "";
         char[] input = text.toCharArray();
-        char[] keyChar = key.toCharArray();
-        char[][] splitInput = new char[runsCount][text.length()];
+        char[][] splitInput = new char[runsCount][5];
         
-        // Split the data up into an array of arrays of 5 character blocks
+        //Split the data up into an array of arrays of 5 character blocks
         for(int i = 0; i < runsCount; i++) {
-            for(int j = 0; j < text.length(); j++) {
+            for(int j = 0; j < 5; j++) {
                 splitInput[i][j] = input[i * 5 + j];
             }
         }
-        
-        if()
 
+        //XOR and encrypt the IV with the first block, use the result to XOR and encrypt the next block, and so on
+        for(int i = 0; i < runsCount; i++) {
+            temp = new String(Conversions.encryptPlusXOR(splitInput[i], key.toCharArray(), iv));
+            result += temp;
+            iv = temp;
+        }
 
+        //Pad the last block with 0s if there is a remainder, and then finish off encrypting the result
+        if(remaining > 0) {
+            char[] remainingChars = new char[5];
+            for(int i = 0; i < 5; i++) {
+                if(i >= remaining) {
+                    remainingChars[i] = (char) 0;
+                } else {
+                    int clean = (runsCount * 5);
+                    remainingChars[i] = input[clean + i];
+                }
+
+            }
+            temp = new String(Conversions.encryptPlusXOR(remainingChars, key.toCharArray(), iv));
+            result += temp;
+        }
+
+        return result;
     }
 
-    
-
-    /* Method for decrypting using
-     * the cipher block chaining method
-     * Decrypt the input with the key,
-     * and either XOR with the initial vector
-     * (for the first input)
-     * or XOR with the previous output
+    /* Method of decryption using
+     * Cipher Block Chaining
+     * The input is inversely encrypted
+     * Then XOR the result with either
+     * the iv or the previous input
+     * to get the final decryption
      */
-    public static String decryptedCBC(String[] encryption, String[] key) {
-        // Initializing variables
-        int decryptVal = 0;
-        int initVect = 0;
-        int sum = 0;
-        String[] decrypted = new String[encryption.length];
+    public static String decryptCBC(String encryption, String key, String iv) {
+        int runs = encryption.length() / 35;
+        int dec = 0;
         String result = "";
-        int counter = 0;
+        String temp1 = "";
+        String temp2 = "";
+        char[] input = encryption.toCharArray();
+        char[][] splitInput = new char[runs][35];
 
-        // Filling the array with empty strings to it isn't filled with null values
-        Arrays.fill(decrypted, "");
-        
-
-        for(int i = 0; i < encryption.length; i++) {
-            decrypted[i] = Conversions.deBox(encryption, key, counter);
-            counter++;
-            for(int j = 0; j < encryption[i].length(); j++) {
-                decryptVal = Integer.valueOf(decrypted[i].substring(j, j + 1));
-
-                // If we should XOR sum with the initialization vector
-                if(i < iv.length) {
-                    initVect = Integer.valueOf(iv[i].substring(j, j + 1));
-                    sum = Conversions.XOR(decryptVal, initVect);
-                }
-
-                // Otherwise XOR sum with the previous output, ie XOR y3 with x2
-                else {
-                    initVect = Integer.valueOf(encryption[i - 1].substring(j, j + 1));
-                    sum = Conversions.XOR(decryptVal, initVect);
-                }
-
-                decrypted [i] += Integer.toString(sum);
+        //Split up the input into an array of arrays of 35 bit blocks
+        for(int i = 0; i < runs; i++) {
+            for(int j = 0; j < 35; j++) {
+                splitInput[i][j] = input[i * 35 + j];
             }
         }
-        result = Conversions.asciiToChar(Conversions.binaryToASCII(decrypted));
+
+        //For every array of 35 bit blocks, decrypt using the key and then XOR the IV to that key for use later.
+        //From there, convert the block into its ASCII representation one character (7 bits) at a time, adding the XORD IV along the way. Return the result.
+        for(int i = 0; i < runs; i++) {
+            temp1 = new String(Conversions.decryptNoChars(splitInput[i], key.toCharArray()));
+            char[] xoring = Conversions.XOR(temp1.toCharArray(), iv.toCharArray());
+            temp2 = "";
+            for(int j = 0; j < xoring.length; j++) {
+                temp2 += xoring[j];
+                if(temp2.length() == 7) {
+                    dec = Integer.parseInt(temp2, 2);
+                    result += (char) dec;
+                    temp2 = "";
+                }
+            }
+            iv = String.valueOf(splitInput[i]);
+        }
+
         return result;
     }
 }

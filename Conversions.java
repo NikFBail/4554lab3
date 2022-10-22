@@ -1,51 +1,87 @@
 public class Conversions {
 
-    /* Method for converting an integer
-     * array into binary values
-     * Stores the binary values in
-     * a string array
+    /* Method for converting the iv to binary
+     * We need a binary that is at least 16
+     * bits long, so if it is shorter we will pad
+     * with 0's on the right side so it will
+     * maintain it's original value
+     */
+    public static String binaryIV(int input) {
+        String binary = Integer.toBinaryString(input);
+        while (binary.length() < 16) {
+            binary = "0" + binary;
+        }
+
+        return binary;
+    }
+
+    /* Method for converting a char array
+     * into a binary, stored in a char array
+     * If any of the binary strings are less than
+     * 7 in length, we pad with 0's on the right
+     * side so the binary will maintain
+     * it's original value
      */
     public static char[] convertToBinary(char[] input) {
         String temp = "";
+        String binaryInput = "";
         for(int i = 0; i < input.length; i++) {
-            String augInput = Integer.toBinaryString((int) input[i]);
-            while(augInput.length() < 7) {
-                augInput = "0" + augInput;
+            binaryInput = Integer.toBinaryString((int) input[i]);
+            while(binaryInput.length() < 7) {
+                binaryInput = "0" + binaryInput;
             }
-            temp = temp + augInput;
+            temp += binaryInput;
         }
 
-        char[] res = temp.toCharArray();
-        return res;
+        char[] result = temp.toCharArray();
+        return result;
     }
 
-    // Method for implementing the right shift on a char array
+    /* Performs a right shift on a char array
+     * Shifts the first three chars of a character value
+     * to the next character value in the char array
+     * The chars in char[char.length] get moved to char[0]
+     * Does this by shifting the first char in each
+     * character value in the array first,
+     * then the second char of each character value,
+     * and then the third char of each character value
+     */
     public static char[] rightShift(char[] input) {
         int len = input.length;
 
         for(int i = 0; i < 3; i++) {
-            char store = input[0];
+            char storage = input[0];
             for(int j = 0; j < len; j++) {
                 char temp = input[(j + 1) % len];
-                input[(j + 1) % len] = store;
-                store = temp;
+                input[(j + 1) % len] = storage;
+                storage = temp;
             }
         }
+
         return input;
     }
 
-    // Method for implementing the left shift on a char array
+    /* Performs a left shift on a char array
+     * Shifts the first three chars of a character value
+     * to the previous character value in the char array
+     * The chars in char[0] get moved to char[char.length]
+     * Does this by shifting the first char in each
+     * character value in the array first,
+     * then the second char of each character value,
+     * and then the third char of each character value
+     */
     public static char[] leftShift(char[] input) {
         int len = input.length;
 
         for(int i = 0; i < 3; i++) {
-            char store = input[len - 1];
+            char storage = input[len - 1];
             for(int j = input.length - 1; j >= 0; j--) {
                 char temp = input[(j - 1 + len) % len];
-                input[(j - 1 + len) % len] = store;
-                store = temp;
+                input[(j - 1 + len) % len] = storage;
+                storage = temp;
             }
         }
+
         return input;
     }
 
@@ -54,24 +90,47 @@ public class Conversions {
     public static char[] XOR(char[] input, char[] key) {
         int num = 0;
         int keyVal = 0;
-        char[] resultant = new char[key.length];
-        for(int i = 0; i < resultant.length; i++) {
+        char[] result = new char[key.length];
+        for(int i = 0; i < result.length; i++) {
             num = Character.getNumericValue(input[i]);
             keyVal = Character.getNumericValue(key[i]);
-            // This turns into something like: (char)(((1 + 0)mod 2) + '0')
-            resultant[i] = (char) (((num + keyVal) % 2) + '0');
+            result[i] = (char) (((num + keyVal) % 2) + '0');
         }
-        return resultant;
+
+        return result;
+    }
+
+    /* Encryption method
+     * Look more into how this is different from the eBox
+     */
+    public static char[] encryptBinary(char[] input, char[] key) {
+        char[] plain = rightShift(input); // Shift binary representation to the right (circular)
+        char[] encrypt = new char[plain.length];
+        encrypt = XOR(plain, key);
+        return (encrypt);
     }
 
     // Encryption box operations
     // What happens in the Ebox stays in the Ebox
     public static char[] eBox(char[] input, char[] key) {
-        char[] charArr = convertToBinary(input);
-        char[] plain = rightShift(charArr);
-        char[] enc = new char[plain.length];
-        enc = XOR(plain, key);
-        return (enc);
+        char[] charArray = convertToBinary(input);
+        char[] plain = rightShift(charArray);
+        char[] encrypt = new char[plain.length];
+        encrypt = XOR(plain, key);
+
+        return (encrypt);
+    }
+
+    // eBox with another XOR after the normal encryption operations
+    public static char[] encryptPlusXOR(char[] input, char[] key, String vector) {
+        char[] vectArr = vector.toCharArray();
+        char[] charArr = convertToBinary(input); // Convert to binary (Result is a char array of 1's and 0's)
+        charArr = XOR(charArr, vectArr);
+        char[] plain = rightShift(charArr); // Shift binary representation to the right (circular)
+        char[] encrypt = new char[plain.length];
+        encrypt = XOR(plain, key);
+
+        return (encrypt);
     }
 
     /* Does the inverse of the eBox
@@ -79,19 +138,32 @@ public class Conversions {
      * right shift
      */
     public static String deBox(char[] text, char[] key) {
+        String temp = "";
+        String result = "";
         char[] unKey= new char[key.length];
         unKey = XOR(text, key);
         unKey = leftShift(unKey);
-        String strRep = "";
-        String res = "";
-        for (int i = 0; i < unKey.length; i++) {
-            strRep = strRep + unKey[i];
-            if (strRep.length() == 7) {
-                int decimal = Integer.parseInt(strRep, 2);
-                res = res + (char) decimal;
-                strRep = "";
+        
+        for(int i = 0; i < unKey.length; i++) {
+            temp += unKey[i];
+            if(temp.length() == 7) {
+                int decimal = Integer.parseInt(temp, 2);
+                result += (char) decimal;
+                temp = "";
             }
         }
-        return res;
-    } 
+
+        return result;
+    }
+
+    /* Look more into the decryption method */
+    public static String decryptNoChars(char[] encrypted, char[] key) {
+        String result = "";
+        char[] unKey = new char[key.length];
+        unKey = XOR(encrypted, key);
+        unKey = leftShift(unKey);
+        result = String.valueOf(unKey);
+
+        return result;
+    }
 }
