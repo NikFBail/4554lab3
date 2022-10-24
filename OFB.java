@@ -1,82 +1,85 @@
-import java.util.Arrays;
-
 public class OFB {
     // The initialization vector
     // Private as it shouldn't be referenced outside of this class
     private static int[] ofbIV = {0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1};
-    private static String[] iv = Conversions.binaryToString(ofbIV);
 
-    /* Method for encryption using
-     * Output Feedback
-     * First encrypt either the iv
-     * (only for the first input) with
-     * the key, or the previous eBox
-     * gets encrypted with the key
-     * Then XOR the result with the input
-     * Need to store the eBox encryptions
-     * 
-     * The encryption method is the decryption method too
-     * For decryption, input is the encrypted text, and
-     * the key
+    /* Encryption method using
+     * Output Feedback Mode
+     * First encrypt either the
+     * initialization vector, or the
+     * result of the previous eBox
+     * (not the whole encryption, just the eBox)
+     * then XOR with the plaintext
+     * to get the encrypted text
+    */
+    public static String encryptOFB(String plaintext, String key, String iv) {
+        String stream = "";
+        String encryptedIV = "";
+        int runsCount = plaintext.length() / 5;
+        int remaining = plaintext.length() % 5;
+        char[] result = new char[plaintext.length()];
+
+        // Checks if the text length is a multiple of 5
+        // If not, need to do another run
+        if(remaining > 0) {
+            runsCount++;
+        }
+
+        // Create the encryption stream by encrypting the IV with the key character by character
+        // Use the result of the previous encryption to encrypt the current one
+        for(int i = 0; i < runsCount; i++) {
+            encryptedIV = String.valueOf(Conversions.encryptBinary(iv.toCharArray(), key.toCharArray()));
+            stream += encryptedIV;
+            iv = encryptedIV;
+        }
+
+        // XOR the plaintext with the encrypted stream
+        result = Conversions.XOR(stream.toCharArray(), Conversions.convertToBinary(plaintext.toCharArray()));
+        return String.valueOf(result);
+    }
+
+    /* Decryption method for
+     * Output Feedback Mode
+     * The same as the encryption method
+     * The only difference here is that we
+     * are converting to a string that is
+     * understood by the user
+     * (ie not in binary)
      */
-    public static String[] encryptDecryptOFB(String[] plaintext, String[] key) {
-        // Initializing variables
-        int initVect = 0;
-        int k = 0;
-        int p = 0;
-        int encrypt = 0;
-        int sum = 0;
-        String[] eBox = new String[plaintext.length]; // Array for storing the values of the encryption box
-        String[] encrypted = new String[plaintext.length];
+    public static String decryptOFB(String encryption, String key, String iv) {
+        String stream = "";
+        String res = "";
+        String strRep = "";
+        int runsCount = encryption.length() / 35;
+        int remaining = encryption.length() % 35;
 
-        // Filling the arrays with "" so they aren't null
-        Arrays.fill(encrypted, "");
-        Arrays.fill(eBox, "");
+        // Checks if the encrypted text has length of a multiple of 35
+        // If not, need to do another run
+        if(remaining > 0) {
+            runsCount++;
+        }
 
-        for(int i = 0; i < plaintext.length; i++) {
-            for(int j = 0; j < plaintext[i].length(); j++) {
-                p = Integer.valueOf(plaintext[i].substring(j, j + 1));
-                k = Integer.valueOf(key[i % key.length].substring(j, j + 1));
+        // Create the encryption stream by encrypting the IV with the key character by character
+        // Use the result of the previous encryption to encrypt the current one
+        for(int i= 0; i < runsCount; i++) {
+            String encIV = String.valueOf(Conversions.encryptBinary(iv.toCharArray(), key.toCharArray()));
+            stream += encIV;
+            iv = encIV;
+        }
 
-                // If we use the initial vector for encryption
-                if(i < iv.length) {
-                    initVect = Integer.valueOf(iv[i].substring(j, j + 1));
-                    sum = XOR(initVect, k);
-                    eBox[i] += Integer.toString(sum); // Storing the value of the eBox encryption
-                }
+        // XOR the encrypted text with the decrypted stream
+        char[] result = new char[encryption.length()];
+        result = Conversions.XOR(stream.toCharArray(), encryption.toCharArray());
 
-                // Else use the value of the previous eBox fo encryption
-                else {
-                    initVect = Integer.valueOf(eBox[i - 1].substring(j, j + 1));
-                    sum = XOR(initVect, k);
-                    eBox[i] += Integer.toString(sum); // Storing the value of the eBox encryption
-                }
-
-                encrypt = XOR(p, sum);
-                encrypted[i] += Integer.toString(encrypt);
+        // Convert to string representation
+        for(int i = 0; i < result.length; i++) {
+            strRep = strRep + result[i];
+            if(strRep.length() == 7) {
+                int decimal = Integer.parseInt(strRep, 2);
+                res += (char) decimal;
+                strRep = "";
             }
         }
-        return encrypted;
-    }
-
-    /* Main method for decryption
-     * Calls upon the other methods
-     * in this class to help decrypt
-     */
-    public static String decryptOFB(String[] encryption, String[] key) {
-        // Conversions from the Conversions class
-        String[] decrypted = encryptDecryptOFB(encryption, key);
-        String[] removeShift = Conversions.removeShift(decrypted);
-        int[] ascii = Conversions.binaryToASCII(removeShift);
-        String word = Conversions.asciiToChar(ascii);
-
-        return word;
-    }
-
-    // XOR method
-    public static int XOR(int x1, int x2) {
-        int sum = 0;
-        sum = (x1 + x2) % 2;
-        return sum;
+        return res;
     }
 }
