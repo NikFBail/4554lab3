@@ -21,6 +21,7 @@ public class Conversions {
      * 7 in length, we pad with 0's on the right
      * side so the binary will maintain
      * it's original value
+     * A binary value consists of only 1s and 0s
      */
     public static char[] convertToBinary(char[] input) {
         String temp = "";
@@ -121,12 +122,15 @@ public class Conversions {
         return (encrypt);
     }
 
-    // eBox with another XOR after the normal encryption operations
-    public static char[] encryptPlusXOR(char[] input, char[] key, String vector) {
-        char[] vectArr = vector.toCharArray();
-        char[] charArr = convertToBinary(input); // Convert to binary (Result is a char array of 1's and 0's)
-        charArr = XOR(charArr, vectArr);
-        char[] plain = rightShift(charArr); // Shift binary representation to the right (circular)
+    /* eBox with another XOR after the normal encryption operations
+     * Useful for CBC, when need to XOR with previous encrypted block
+     * before encrypting the current block
+     */
+    public static char[] encryptPlusXOR(char[] input, char[] key, String initVect) {
+        char[] ivArr = initVect.toCharArray();
+        char[] charArr = convertToBinary(input);
+        charArr = XOR(charArr, ivArr);
+        char[] plain = rightShift(charArr);
         char[] encrypt = new char[plain.length];
         encrypt = XOR(plain, key);
 

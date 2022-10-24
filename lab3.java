@@ -35,8 +35,8 @@ class lab3 {
          */
         String encryptedCBC = CBC.encryptCBC(block, key, iv);
         String decryptedCBC = CBC.decryptCBC(encryptedCBC, key, iv);
-        System.out.println("CBC Encryption: " + encryptedCBC);
-        System.out.println("CBC Decryption: " + decryptedCBC);
+        // System.out.println("CBC Encryption: " + encryptedCBC);
+        // System.out.println("CBC Decryption: " + decryptedCBC);
 
         /* Cipher Feedback
          * This block cipher encrypts
@@ -44,10 +44,10 @@ class lab3 {
          * then XORs the result with
          * the plaintext
          */
-        // String[] encryptedCFB = CFB.encryptCFB(block, key);
-        // String  decryptedCFB = CFB.decryptCFB(encryptedCFB, key);
-        // System.out.println("CFB Encryption: " + Arrays.toString(encryptedCFB));
-        // System.out.println("CFB Decryption: " + decryptedCFB);
+        String encryptedCFB = CFB.encryptCFB(block, key, iv);
+        String  decryptedCFB = CFB.decryptCFB(encryptedCFB, key, iv);
+        System.out.println("CFB Encryption: " + encryptedCFB);
+        System.out.println("CFB Decryption: " + decryptedCFB);
 
         /* Output Feedback
          * This block cipher encrypts
