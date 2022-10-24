@@ -1,8 +1,4 @@
 public class CTR {
-    // The initialization vector
-    // Private as it shouldn't be referenced outside of this class
-    private static String ctrIV = "1000011101111001001";
-
     /* Method of encryption using
      * Counter Mode
      * Takes an iv with a counter and

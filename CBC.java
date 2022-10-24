@@ -1,8 +1,4 @@
 public class CBC {
-    // The initialization vector
-    // Private as it shouldn't be referenced outside of this class
-    private static String cbcIV = "01100100011010111101001111011110001";
-
     /* Method of encryption using
      * Cipher Block Chaining
      * First XOR the input with either

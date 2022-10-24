@@ -1,8 +1,4 @@
 public class OFB {
-    // The initialization vector
-    // Private as it shouldn't be referenced outside of this class
-    private static String ofbIV = "01011010010111001110100001100001001";
-
     /* Encryption method using
      * Output Feedback Mode
      * First encrypt either the

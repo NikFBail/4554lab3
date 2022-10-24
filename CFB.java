@@ -1,8 +1,4 @@
 public class CFB {
-    // The initialization vector
-    // Private as it shouldn't be referenced outside of this class
-    private static String cfbIV = "00111010110011011100011101100100011";
-
     public static String encryptCFB(String plaintext, String key, String iv) {
         // Initializing variables
         String result = "";
