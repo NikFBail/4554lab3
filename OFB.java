@@ -1,7 +1,7 @@
 public class OFB {
     // The initialization vector
     // Private as it shouldn't be referenced outside of this class
-    private static int[] ofbIV = {0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1};
+    private static String ofbIV = "01011010010111001110100001100001001";
 
     /* Encryption method using
      * Output Feedback Mode
@@ -13,6 +13,7 @@ public class OFB {
      * to get the encrypted text
     */
     public static String encryptOFB(String plaintext, String key, String iv) {
+        // Initializing variables
         String stream = "";
         String encryptedIV = "";
         int runsCount = plaintext.length() / 5;
@@ -47,11 +48,13 @@ public class OFB {
      * (ie not in binary)
      */
     public static String decryptOFB(String encryption, String key, String iv) {
+        // Initializing variables
         String stream = "";
         String res = "";
         String strRep = "";
         int runsCount = encryption.length() / 35;
         int remaining = encryption.length() % 35;
+        char[] result = new char[encryption.length()];
 
         // Checks if the encrypted text has length of a multiple of 35
         // If not, need to do another run
@@ -61,19 +64,18 @@ public class OFB {
 
         // Create the encryption stream by encrypting the IV with the key character by character
         // Use the result of the previous encryption to encrypt the current one
-        for(int i= 0; i < runsCount; i++) {
+        for(int i = 0; i < runsCount; i++) {
             String encIV = String.valueOf(Conversions.encryptBinary(iv.toCharArray(), key.toCharArray()));
             stream += encIV;
             iv = encIV;
         }
 
         // XOR the encrypted text with the decrypted stream
-        char[] result = new char[encryption.length()];
         result = Conversions.XOR(stream.toCharArray(), encryption.toCharArray());
 
         // Convert to string representation
         for(int i = 0; i < result.length; i++) {
-            strRep = strRep + result[i];
+            strRep += result[i];
             if(strRep.length() == 7) {
                 int decimal = Integer.parseInt(strRep, 2);
                 res += (char) decimal;

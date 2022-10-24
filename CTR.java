@@ -1,76 +1,84 @@
-import java.util.Arrays;
-
 public class CTR {
     // The initialization vector
     // Private as it shouldn't be referenced outside of this class
-    private static int[] ctrIV = {1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1};
-    private static String[] iv = new String[35];
+    private static String ctrIV = "1000011101111001001";
 
-    /* Method for implementing an IV
-     * with a 16 bit counter
-     * First 19 bits will be the randomly generated IV
-     */
-    // Return String[]
-    public static void formalCTRiv(int counter, int[] ctrIV) {
-        
-    }
-
-    /* Method for encryption using
+    /* Method of encryption using
      * Counter Mode
-     * First encrypt the IV
-     * (that includes a 16 bit counter)
-     * with the key
-     * Then XOR the result with the input
-     * to produce the output
-     * 
-     * The encryption method is the decryption method too
+     * Takes an iv with a counter and
+     * encrypts with the key
+     * (ie the first encryption would be with an iv
+     * with 0s at the end, second iv encrypted would
+     * have 00...01, third would have 00...10, fourth
+     * would have 00...11, and so on)
+     * Then XOR the result with the input to get the
+     * encrypted text
      */
-    public static String[] encryptDecryptCTR(String[] plaintext, String[] key) {
+    public static String encryptCTR(String plaintext, String key, String iv) {
         // Initializing variables
-        int initVect = 0;
-        int k = 0;
-        int p = 0;
-        int encrypt = 0;
-        int sum = 0;
-        String[] encrypted = new String[plaintext.length];
+        int remaining = plaintext.length() % 5;
+        int runsCount = plaintext.length() / 5;
+        String stream = "";
+        char[] result = new char[plaintext.length()];
 
-        // Fill encrypted with non-null values
-        Arrays.fill(encrypted, "");
-
-        for(int i = 0; i < plaintext.length; i++) {
-            for(int j = 0; j < plaintext[i].length(); j++) {
-                p = Integer.valueOf(plaintext[i].substring(j, j + 1));
-                k = Integer.valueOf(key[i % key.length].substring(j, j + 1));
-                initVect = Integer.valueOf(iv[i].substring(j, j + 1));
-
-                encrypt = XOR(initVect, k); // Actual eBox operation
-                sum = XOR(encrypt, p); // XOR-ing
-
-                encrypted[i] += Integer.toString(sum);
-            }
+        // Checks if the plaintext has length of a multiple of 5
+        // If not, increase runs by 1
+        if(remaining > 0) {
+            runsCount++;
         }
 
-        return encrypted;
+        // Takes the 16-bit iv, and runsCount, and implements
+        // a 35-bit iv with a counter at the end for each round of encryption
+        for(int index = 0; index < runsCount; index++) {
+            char[] tempChar = (String.valueOf(iv) + Conversions.binaryIV(index)).toCharArray();
+            stream += String.valueOf(Conversions.encryptBinary(tempChar, key.toCharArray()));
+        }
+
+        result = Conversions.XOR(stream.toCharArray(), Conversions.convertToBinary(plaintext.toCharArray()));
+        return String.valueOf(result);
     }
 
-    /* Main method for decryption
-     * Calls upon the other methods
-     * in this class to help decrypt
+    /* Method of decryption using
+     * Counter Method
+     * Same as encryption method,
+     * only difference is that at the end
+     * we convert back to a string readable
+     * by the user
+     * (ie not in binary)
      */
-    public static String decryptCTR(String[] encryption, String[] key) {
-        // Conversions from the Conversions class
-        String[] decrypted = encryptDecryptCTR(encryption, key);
-        String[] removeShift = Conversions.removeShift(decrypted);
-        int[] ascii = Conversions.binaryToASCII(removeShift);
-        String word = Conversions.asciiToChar(ascii);
+    public static String decryptCTR(String encryption, String key, String iv) {
+        // Initializing variables
+        int remaining = encryption.length() % 35;
+        int runs = encryption.length() / 35;
+        String stream = "";
+        String res = "";
+        String temp = "";
+        char[] result = new char[encryption.length()];
 
-        return word;
-    }
+        // Checks if the plaintext has length of a multiple of 5
+        // If not, increase runs by 1
+        if(remaining > 0) {
+            runs++;
+        }
 
-    // XOR method
-    public static int XOR(int x1, int x2) {
-        int sum = 0;
-        sum = (x1 + x2) % 2;
-        return sum;
+        // Takes the 16-bit iv, and runsCount, and implements
+        // a 35-bit iv with a counter at the end for each round of encryption
+        for(int index = 0; index < runs; index++) {
+            char[] tempChar = (String.valueOf(iv) + Conversions.binaryIV(index)).toCharArray();
+            stream += String.valueOf(Conversions.encryptBinary(tempChar, key.toCharArray()));
+        }
+ 
+        result = Conversions.XOR(stream.toCharArray(), encryption.toCharArray());
+        
+        // Converting from a char array to a string
+        for(int i = 0; i < result.length; i++) {
+            temp += result[i];
+            if(temp.length() == 7) {
+                int decimal = Integer.parseInt(temp, 2);
+                res += (char) decimal;
+                temp = "";
+            }
+        }
+        return res;
     }
 }

@@ -30,10 +30,10 @@ class lab3 {
         // System.out.println("OFB Encryption: " + encryptedOFB);
         // System.out.println("OFB Decryption: " + decryptedOFB);
 
-        // String[] encryptedCTR = CTR.encryptDecryptCTR(blockBinary, formalKey);
-        // String decryptedCTR = CTR.decryptCTR(encryptedCTR, formalKey);
-        // System.out.println("CTR Encryption: " + Arrays.toString(encryptedCTR));
-        // System.out.println("CTR Decryption: " + decryptedCTR);
+        String encryptedCTR = CTR.encryptCTR(block, key, iv19);
+        String decryptedCTR = CTR.decryptCTR(encryptedCTR, key, iv19);
+        System.out.println("CTR Encryption: " + encryptedCTR);
+        System.out.println("CTR Decryption: " + decryptedCTR);
 
     }
 

@@ -6,6 +6,7 @@ public class ECB {
      * produce the encryption
      */
     public static String encryptECB(String text, String key) {
+        // Initializing variables
         int remaining= text.length() % 5;
         int runsCount = text.length() / 5;
         String result = "";
@@ -51,6 +52,7 @@ public class ECB {
      * to produce the final decryption
      */
     public static String decryptECB(String input, String key) {
+        // Initializing variables
         int runsCount = input.length() / 35;
         String result = "";
         String temp;

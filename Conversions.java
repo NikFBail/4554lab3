@@ -5,6 +5,8 @@ public class Conversions {
      * bits long, so if it is shorter we will pad
      * with 0's on the right side so it will
      * maintain it's original value
+     * 
+     * Used in the CTR class for making an iv with a counter
      */
     public static String binaryIV(int input) {
         String binary = Integer.toBinaryString(input);
@@ -102,10 +104,11 @@ public class Conversions {
     }
 
     /* Encryption method
-     * Look more into how this is different from the eBox
+     * The same as the eBox method,
+     * but useful when all inputs are already in binary
      */
     public static char[] encryptBinary(char[] input, char[] key) {
-        char[] plain = rightShift(input); // Shift binary representation to the right (circular)
+        char[] plain = rightShift(input);
         char[] encrypt = new char[plain.length];
         encrypt = XOR(plain, key);
         return (encrypt);

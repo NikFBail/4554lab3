@@ -10,6 +10,7 @@ public class CBC {
      * Then encrypt the result to get the encryption
      */
     public static String encryptCBC(String text, String key, String iv) {
+        // Initializing variables
         int runsCount = text.length() / 5;
         int remaining = text.length() % 5;
         String result = "";
@@ -60,6 +61,7 @@ public class CBC {
      * to get the final decryption
      */
     public static String decryptCBC(String encryption, String key, String iv) {
+        // Initializing variables
         int runsCount = encryption.length() / 35;
         int dec = 0;
         String result = "";
