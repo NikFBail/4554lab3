@@ -1,0 +1,30 @@
+1. The 1-bit error in ECB gave us:
+iNspector
+So one block was changed from a lowercase char to it's
+equivalent uppercase char
+
+2. The 1-bit error in CBC gave us:
+1vZICc|or
+Most of the original plaintext was changed,
+with only the last two blocks ('or') staying the same
+
+3. The 1-bit error in CFB gave us:
+☻mvgqcuor
+Similar result as in CBC, all the plaintext was
+changed except for the last two ('or').
+It's also interesting that the first char became an emoji
+
+4. The 1-bit error in OFB gave us:
+☻ewgq.E_
+This time the entire plaintext was changed, and the
+emoji is back. Also, the plaintext was originally 9 char long,
+while the decrypted 1-bit error returned a 8 char string,
+unless the last one is a space.
+
+5. The 1-bit error in CTR gave us:
+
+ee▬r
+While only 4 char are visible, a new line was put in for one
+of the first blocks in the 1-bit error. This is the most
+noticeably different 1-bit error, as there is formatting introduced,
+as well as only 4 visible chars (not visible changes, visible letters/symbols).
